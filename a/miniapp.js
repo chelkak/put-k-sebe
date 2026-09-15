@@ -95,7 +95,10 @@ window.MINI = (function () {
     const n = C.QUESTIONS.indexOf(q), sp = sphere(q.sphere);
     const b = screen(); main(null);
     // Сфера тихой строкой над вопросом, без отдельных экранов (Антон и Александр, 15.09).
-    const about = (T(`BLOCK_${sp.key}_INTRO`) || "").split("\n")[1] || "";
+    // Только название сферы: пояснение переносилось на две строки и налезало на счётчик (16.09).
+    // Текст пояснения остаётся в библиотеке, включается обратно через SHOW_SPHERE_ABOUT, если Антон попросит.
+    const SHOW_SPHERE_ABOUT = false;
+    const about = SHOW_SPHERE_ABOUT ? (T(`BLOCK_${sp.key}_INTRO`) || "").split("\n")[1] || "" : "";
     const label = el("span", "m-sphere"); label.append(el("b", "", sp.name));
     if (about) label.append(document.createTextNode(" · " + about.charAt(0).toLowerCase() + about.slice(1).replace(/\.$/, "")));
     const meta = el("div", "m-qmeta"); meta.append(label, el("span", "m-count", `${n + 1} из 15`));
