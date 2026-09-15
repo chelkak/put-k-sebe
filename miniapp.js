@@ -153,7 +153,11 @@ window.MINI = (function () {
     b.append(why, prog);
     event("offer_viewed", "miniapp");
 
-    const contact = () => { event("contact_clicked", "miniapp"); toast("Здесь откроется чат с Антоном (contact_url)"); };
+    const contact = () => {
+      event("contact_clicked", "miniapp");
+      const c = A().contactUrl;
+      if (c && A().openTelegram) A().openTelegram(c); else toast("Здесь откроется чат с Антоном" + (c ? ": " + c : ""));
+    };
     const url = (S.settings.program_url || "").trim();
     if (/^https:\/\/\S+\.\S+/.test(url)) {
       b.append(ghost(C.BUTTON.BTN_CONTACT, contact));

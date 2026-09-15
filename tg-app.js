@@ -77,8 +77,15 @@
     clearTimeout(timer); timer = setTimeout(() => (t.hidden = true), 2600);
   }
 
+  // Контакт владельца (system_settings.contact_url в ТЗ). Не храним в памяти телефона, чтобы замена сразу доходила до всех.
+  const CONTACT_URL = "https://t.me/anton_kostin_opora";
+  function openTelegram(url) {
+    try { if (tg && tg.openTelegramLink) return tg.openTelegramLink(url); } catch (e) {}
+    window.open(url, "_blank");
+  }
+
   window.APP = { get S() { return S; }, C, L, save, event, active, lastDone, newSession, computeResult, T, sphere, STATUS_TITLE,
-    renderPanel() {}, toast, tap() {} };
+    renderPanel() {}, toast, tap() {}, contactUrl: CONTACT_URL, openTelegram };
 
   event("bot_started", "telegram");
   window.MINI.show();
