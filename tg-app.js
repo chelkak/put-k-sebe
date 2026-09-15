@@ -6,8 +6,13 @@
   const KEY = "pks_tg_v1";
   const fresh = () => ({ user: { first_name: "" }, settings: { program_url: "https://example.getcourse.ru/put-k-sebe", mode: "mini" }, sessions: [], events: [] });
 
+  // Ссылки владельца (system_settings в ТЗ). Берутся отсюда при каждом запуске, чтобы замена доходила до всех.
+  const PROGRAM_URL = "https://putksebe-system.ru/sam_zero";
+  const CONTACT_URL = "https://t.me/anton_kostin_opora";
+
   let S;
   try { S = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch (e) { S = fresh(); }
+  S.settings.program_url = PROGRAM_URL;
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 
   function applyTheme() {
@@ -77,15 +82,17 @@
     clearTimeout(timer); timer = setTimeout(() => (t.hidden = true), 2600);
   }
 
-  // Контакт владельца (system_settings.contact_url в ТЗ). Не храним в памяти телефона, чтобы замена сразу доходила до всех.
-  const CONTACT_URL = "https://t.me/anton_kostin_opora";
   function openTelegram(url) {
     try { if (tg && tg.openTelegramLink) return tg.openTelegramLink(url); } catch (e) {}
     window.open(url, "_blank");
   }
+  function openLink(url) {
+    try { if (tg && tg.openLink) return tg.openLink(url); } catch (e) {}
+    window.open(url, "_blank");
+  }
 
   window.APP = { get S() { return S; }, C, L, save, event, active, lastDone, newSession, computeResult, T, sphere, STATUS_TITLE,
-    renderPanel() {}, toast, tap() {}, contactUrl: CONTACT_URL, openTelegram };
+    renderPanel() {}, toast, tap() {}, contactUrl: CONTACT_URL, openTelegram, openLink };
 
   event("bot_started", "telegram");
   window.MINI.show();

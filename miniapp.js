@@ -161,7 +161,10 @@ window.MINI = (function () {
     const url = (S.settings.program_url || "").trim();
     if (/^https:\/\/\S+\.\S+/.test(url)) {
       b.append(ghost(C.BUTTON.BTN_CONTACT, contact));
-      main(C.BUTTON.BTN_PROGRAM_OPEN, () => { event("program_link_clicked", url); toast("Здесь откроется " + url); });
+      main(C.BUTTON.BTN_PROGRAM_OPEN, () => {
+        event("program_link_clicked", url);                              // 8.7: событие до открытия ссылки
+        if (A().openLink) A().openLink(url); else toast("Здесь откроется " + url);
+      });
     } else {                                                               // 9.19
       event("error_link", "miniapp");
       prog.append(el("p", "m-note", T("ERROR_LINK")));
