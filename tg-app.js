@@ -95,6 +95,14 @@
   window.APP = { get S() { return S; }, C, L, save, event, active, lastDone, newSession, computeResult, T, sphere, STATUS_TITLE,
     renderPanel() {}, toast, tap() {}, contactUrl: CONTACT_URL, openTelegram, openLink };
 
+  // Пункт в меню «⋯» Telegram. Подпись («Настройки») задаёт сам Telegram, внутри наше меню.
+  try {
+    if (tg && tg.isVersionAtLeast && tg.isVersionAtLeast("7.0") && tg.SettingsButton) {
+      tg.SettingsButton.onClick(() => window.MINI.menu());
+      tg.SettingsButton.show();
+    }
+  } catch (e) {}
+
   event("bot_started", "telegram");
   window.MINI.show();
 })();

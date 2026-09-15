@@ -46,10 +46,27 @@ window.MINI = (function () {
       b.append(head("С возвращением", title(d)), el("p", "m-lead", T("START_RETURNING_USER")), ghost(C.BUTTON.BTN_NEW_DIAGNOSTIC, confirmRestart));
       return main(C.BUTTON.BTN_LAST_RESULT, () => result(d));
     }
+    welcome();
+  }
+
+  // Первая страница. После «Начать заново» тоже сюда, чтобы человек снова увидел приветствие и правило (16.09).
+  function welcome(parent) {
+    const { C, T } = A(); const b = screen();
     const list = el("ul", "m-spheres");
     C.SPHERES.forEach((s) => { const li = el("li"); li.append(el("span", "", s.name), el("span", "", "3 вопроса")); list.append(li); });
     b.append(H().hero ? H().hero() : head("Диагностика", "Путь к себе"), el("p", "m-lead", T("START_WELCOME")), el("p", "m-p", T("START_VALUE")), el("p", "m-note", T("INTRO_RULES")), list);   // правило заметно, до списка (Антон, 16.09)
-    main(C.BUTTON.BTN_START, () => begin());
+    main(C.BUTTON.BTN_START, () => begin(parent));
+  }
+
+  // Меню из «⋯» Telegram (SettingsButton): начать заново, последний результат, связь.
+  function menu() {
+    if (locked) return;
+    const { C, lastDone, contactUrl, openTelegram, event } = A();
+    const b = screen(), d = lastDone();
+    b.append(head("Меню", "Путь к себе"), ghost(C.BUTTON.BTN_RESTART, confirmRestart));
+    if (d) b.append(ghost(C.BUTTON.BTN_LAST_RESULT, () => result(d)));
+    if (contactUrl && openTelegram) b.append(ghost(C.BUTTON.BTN_CONTACT, () => { event("contact_clicked", "menu"); openTelegram(contactUrl); }));
+    main("Вернуться", show);
   }
 
   function confirmRestart() {                                            // 9.15, 9.16
@@ -58,7 +75,7 @@ window.MINI = (function () {
     main(C.BUTTON.BTN_CONFIRM_RESTART, () => {
       const a = A().active(); const parent = a || A().lastDone();
       if (a) { a.status = "restarted"; A().save(); }
-      begin(parent);
+      welcome(parent);
     });
   }
 
@@ -178,5 +195,5 @@ window.MINI = (function () {
     A().renderPanel();
   }
 
-  return { show };
+  return { show, menu };
 })();
