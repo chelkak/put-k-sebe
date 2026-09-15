@@ -48,7 +48,7 @@ window.MINI = (function () {
     }
     const list = el("ul", "m-spheres");
     C.SPHERES.forEach((s) => { const li = el("li"); li.append(el("span", "", s.name), el("span", "", "3 вопроса")); list.append(li); });
-    b.append(H().hero ? H().hero() : head("Диагностика", "Путь к себе"), el("p", "m-lead", T("START_WELCOME")), el("p", "m-p", T("START_VALUE")), list, el("p", "m-muted", T("INTRO_RULES")));
+    b.append(H().hero ? H().hero() : head("Диагностика", "Путь к себе"), el("p", "m-lead", T("START_WELCOME")), el("p", "m-p", T("START_VALUE")), el("p", "m-note", T("INTRO_RULES")), list);   // правило заметно, до списка (Антон, 16.09)
     main(C.BUTTON.BTN_START, () => begin());
   }
 
