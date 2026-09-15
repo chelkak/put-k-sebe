@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-skin="a">
+<html lang="ru" data-skin="b">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500;600&family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 
   :root {
@@ -162,59 +162,69 @@
   .mini { height: var(--tg-viewport-stable-height, 100vh); min-height: 0; border: 0; border-radius: 0; }
   .mini-head { display: none; }
   .mini-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
-/*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500;600&family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
-/* Вариант А «как видит Антон»: золото и свет на чёрном, как на его фото и в логотипе. Всегда тёмный. */
-html:root[data-skin="a"] {
-  --ground: #0B0906; --surface: #0D0A06; --sunk: #16110A; --line: #2E2415;
-  --ink: #F2E8D5; --muted: #A39275; --accent: #D9A441; --accent-ink: #1A1206; --accent-soft: #2A1F0F;
-  --strong: #E0B658; --improve: #C9892E; --attention: #B85A3C;
-  --gold: linear-gradient(135deg, #F6DE9A 0%, #D9A441 48%, #9A681D 100%);
-  --display: "Cormorant SC", "Cormorant Garamond", Georgia, serif;
-  --serif: "Cormorant Garamond", Georgia, serif;
+/*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
+/* Вариант Б: путь к Питусираю. Сцена живёт за карточкой, свет ведёт от темноты к восходу.
+   Палитра снята с настоящих фотографий Антона: сухая охра, тёплая зелень, глубокая синева, рыжая тропа. */
+html:root[data-skin="b"] {
+  --ground: #0A0907; --surface: #0C0B09; --sunk: #17130D; --line: #33291C;
+  --ink: #F4EDE0; --muted: #A99A83;
+  color-scheme: dark; --accent: #E0A33F; --accent-ink: #1A1206; --accent-soft: rgba(224, 163, 63, 0.18);
+  --strong: #C8B25A; --improve: #D08F36; --attention: #C2603C;
+  --card: rgba(18, 15, 12, 0.72);
+  --display: "Cormorant Garamond", Georgia, serif;
   --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color-scheme: dark;
+  /* Состояние света, их меняет skin.js на каждый ответ */
+  --sky-top: #07080F; --sky-mid: #0C1018; --sky-bot: #161311;
+  --glow: 0.05; --stars: 1; --sun-y: 150px; --sun-op: 0; --cam: 1; --fig-y: 0px; --fig-s: 1; --haze: 0.25;
 }
-[data-skin="a"] body { background: var(--surface); }
-[data-skin="a"] .mini { background: radial-gradient(90% 45% at 100% 0%, rgba(217, 164, 65, 0.2), transparent 70%), var(--surface); }
-[data-skin="a"] .mini-foot { border-top-color: var(--line); background: var(--surface); }
-[data-skin="a"] .mini-main { background: var(--gold); color: var(--accent-ink); font-weight: 700; letter-spacing: 0.03em; box-shadow: 0 8px 28px rgba(217, 164, 65, 0.22); }
 
-[data-skin="a"] .m-eyebrow { color: var(--accent); letter-spacing: 0.24em; }
-[data-skin="a"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 36px; line-height: 1.02; letter-spacing: 0.02em;
-  background: var(--gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
-[data-skin="a"] .m-lead { font-family: var(--serif); font-size: 22px; line-height: 1.3; font-weight: 500; }
-[data-skin="a"] .m-p { color: var(--ink); opacity: 0.88; }
-[data-skin="a"] .m-spheres, [data-skin="a"] .m-spheres li { border-color: var(--line); }
-[data-skin="a"] .m-spheres li span:first-child { font-family: var(--serif); font-size: 19px; font-weight: 600; }
+[data-skin="b"] body { background: var(--surface); }
+[data-skin="b"] .mini { position: relative; background: var(--surface); overflow: hidden; }
+[data-skin="b"] .b-scene { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+[data-skin="b"] .b-scene svg { width: 100%; height: 100%; display: block; }
+[data-skin="b"] .mini-body { position: relative; z-index: 2; justify-content: flex-end; padding: 18px 18px 22px; }
+/* Карточка интерфейса: нижняя часть экрана, сцена остаётся видимой сверху */
+[data-skin="b"] .mini::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 56%; z-index: 1;
+  background: linear-gradient(to bottom, transparent, var(--card) 12%, var(--card));
+  backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
+  border-top: 1px solid rgba(224, 163, 63, 0.18);
+  border-radius: 24px 24px 0 0;
+}
+[data-skin="b"] .mini-foot { position: relative; z-index: 3; background: transparent; border-top: 0; }
+[data-skin="b"] .mini-main { background: linear-gradient(135deg, #F3D68F, #E0A33F 55%, #A9721F); color: var(--accent-ink); font-weight: 700; }
 
-[data-skin="a"] .m-ticks i { height: 3px; background: var(--line); }
-[data-skin="a"] .m-ticks i.done { background: var(--gold); }
-[data-skin="a"] .m-ticks i.now { background: var(--accent); opacity: 0.5; }
-[data-skin="a"] .m-sphere b { color: var(--accent); letter-spacing: 0.16em; }
-[data-skin="a"] .m-q { font-family: var(--serif); font-size: 28px; font-weight: 600; line-height: 1.15; }
-[data-skin="a"] .m-opt { background: rgba(242, 232, 213, 0.025); border-color: var(--line); border-radius: 14px; }
-[data-skin="a"] .m-opt:hover { border-color: rgba(217, 164, 65, 0.6); }
-[data-skin="a"] .m-opt.picked { background: var(--accent-soft); border-color: var(--accent); box-shadow: 0 0 26px rgba(217, 164, 65, 0.25); }
+[data-skin="b"] .m-eyebrow { color: var(--accent); letter-spacing: 0.2em; }
+[data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
+[data-skin="b"] .m-lead { font-family: var(--display); font-size: 21px; line-height: 1.3; }
+[data-skin="b"] .m-muted, [data-skin="b"] .m-bar-t { color: var(--muted); }
+[data-skin="b"] .m-spheres { border-color: var(--line); }
+[data-skin="b"] .m-spheres li { border-color: var(--line); }
+[data-skin="b"] .m-ticks i { height: 3px; background: rgba(244, 237, 224, 0.18); }
+[data-skin="b"] .m-ticks i.done { background: var(--accent); }
+[data-skin="b"] .m-ticks i.now { background: var(--accent); opacity: 0.45; }
+[data-skin="b"] .m-sphere b { color: var(--accent); }
+[data-skin="b"] .m-q { font-family: var(--display); font-size: 27px; font-weight: 600; line-height: 1.15; }
+[data-skin="b"] .m-opt { background: rgba(244, 237, 224, 0.06); border: 1px solid rgba(244, 237, 224, 0.14); border-radius: 13px; }
+[data-skin="b"] .m-opt:hover { border-color: var(--accent); }
+[data-skin="b"] .m-opt.picked { background: var(--accent-soft); border-color: var(--accent); }
+[data-skin="b"] .m-big b { font-family: var(--display); font-size: 62px; color: var(--accent); }
+[data-skin="b"] .m-sec { border-top-color: rgba(244, 237, 224, 0.12); }
+[data-skin="b"] .m-sec h3 { color: var(--accent); }
+[data-skin="b"] .m-note { background: var(--accent-soft); border: 1px solid rgba(224, 163, 63, 0.3); }
+[data-skin="b"] .m-track { background: rgba(244, 237, 224, 0.1); }
+[data-skin="b"] .m-ghost { color: var(--accent); border-color: rgba(224, 163, 63, 0.35); }
 
-[data-skin="a"] .m-big b { font-family: var(--display); font-size: 68px; background: var(--gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
-[data-skin="a"] .m-sec { border-top: 0; padding-top: 26px; gap: 12px; }
-[data-skin="a"] .m-sec h3 { display: flex; align-items: center; gap: 12px; color: var(--accent); letter-spacing: 0.26em; }
-[data-skin="a"] .m-sec h3::before, [data-skin="a"] .m-sec h3::after { content: ""; flex: 1; height: 1px; }
-[data-skin="a"] .m-sec h3::before { background: linear-gradient(90deg, transparent, rgba(217, 164, 65, 0.7)); }
-[data-skin="a"] .m-sec h3::after { background: linear-gradient(90deg, rgba(217, 164, 65, 0.7), transparent); }
-[data-skin="a"] .m-note { background: var(--accent-soft); border: 1px solid rgba(217, 164, 65, 0.35); font-family: var(--serif); font-size: 19px; line-height: 1.3; }
-[data-skin="a"] .m-track { height: 6px; background: var(--sunk); }
-[data-skin="a"] .m-fill.STRONG { background: var(--gold); }
-[data-skin="a"] .m-ghost { color: var(--accent); border-color: var(--line); }
-[data-skin="a"] .m-ghost:hover { background: var(--accent-soft); }
-
-/* Эмблема на старте: дорога к вершине в золотом кольце, как в логотипе */
-.a-hero { display: grid; justify-items: center; gap: 12px; text-align: center; padding-top: 4px; }
-.a-emblem { width: 136px; height: 136px; filter: drop-shadow(0 0 34px rgba(217, 164, 65, 0.28)); }
-.a-rule { position: relative; width: 72%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
-.a-rule::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; background: var(--accent); transform: translate(-50%, -50%) rotate(45deg); }
-.a-tag { margin: 0; font-family: var(--display); font-size: 14px; letter-spacing: 0.22em; color: var(--accent); }
-.a-sign { display: grid; justify-items: center; gap: 10px; padding-top: 18px; }
+/* Слои сцены двигаются с разной скоростью: это и есть отъезд камеры */
+.b-layer { transform-box: view-box; transform-origin: 50% 100%; transition: transform 900ms ease, opacity 900ms ease; }
+.b-sky-stars { transition: opacity 1200ms ease; }
+.b-sun-g { transition: transform 1100ms ease, opacity 1100ms ease; }
+.b-figures { transition: transform 1000ms ease, opacity 1000ms ease; }
+.b-haze { transition: opacity 1200ms ease; }
+.b-haze-1 { animation: bDrift 46s linear infinite; }
+.b-haze-2 { animation: bDrift 72s linear infinite reverse; }
+@keyframes bDrift { from { transform: translateX(-6%); } to { transform: translateX(6%); } }
+@media (prefers-reduced-motion: reduce) { .b-haze-1, .b-haze-2 { animation: none; } }
 
 </style>
 </head>
