@@ -73,7 +73,11 @@ window.SKIN = (function () {
   }
 
   // Логотип Антона кладём в слой сцены: там режим screen убирает чёрный фон и остаётся одно золото.
+  // На тёмной сцене чёрный фон логотипа исчезает в режиме screen. На светлом кадре результата он вылезет
+  // квадратом, поэтому там логотип прячем до файла с настоящей прозрачностью.
+  const LOGO_READY = true;
   function sceneLogo(show, fallbackHost) {
+    if (!LOGO_READY) return;
     const s = ensureScene();
     let img = s.querySelector(".b-logo");
     if (!show) { if (img) img.style.opacity = "0"; return; }
@@ -98,7 +102,7 @@ window.SKIN = (function () {
 
   function result() {
     apply(15, true);
-    sceneLogo(true);
+    sceneLogo(false);
   }
 
   return { hero, progress, result };
