@@ -12,10 +12,11 @@ window.SKIN = (function () {
     { s: 4,  night: 0.30, dawn: 0.70, day: 0.25, haze: 0.32, glow: 0.55, rain: 0 },
     { s: 6,  night: 0.05, dawn: 0.80, day: 0.60, haze: 0.28, glow: 0.80, rain: 0 },
     { s: 8,  night: 0.00, dawn: 0.25, day: 1.00, haze: 0.18, glow: 1, rain: 0 },
-    { s: 11, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.10, glow: 1, rain: 0 },
-    // Радуга настоящая, с фотографии Антона: появляется к 13-му вопросу и держится до конца
-    { s: 13, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.06, glow: 1, rain: 0.6 },
-    { s: 15, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.00, glow: 1, rain: 0.8 }
+    // Радуга настоящая, с фотографии Антона: проступает к 10-му вопросу и набирает силу к финалу
+    { s: 10, night: 0.00, dawn: 0.05, day: 1.00, haze: 0.12, glow: 1, rain: 0.45 },
+    { s: 11, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.10, glow: 1, rain: 0.55 },
+    { s: 13, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.06, glow: 1, rain: 0.7 },
+    { s: 15, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.00, glow: 1, rain: 0.85 }
   ];
   const mix = (a, b, t) => a + (b - a) * t;
 
