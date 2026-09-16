@@ -209,20 +209,14 @@ html:root[data-skin="b"] {
 
 /* Радуга над долиной: появляется к 13-му вопросу, к финалу становится ярче */
 [data-skin="b"] .b-rainbow {
-  position: absolute; left: 46%; top: 46%; width: 190%; aspect-ratio: 1;
-  transform: translate(-50%, -50%) rotate(-7deg);
-  background: radial-gradient(circle,
-    transparent 44.4%,
-    rgba(255, 90, 90, 0.26) 45%,
-    rgba(255, 190, 90, 0.26) 46.2%,
-    rgba(255, 245, 130, 0.24) 47.2%,
-    rgba(130, 225, 150, 0.24) 48.4%,
-    rgba(120, 190, 255, 0.24) 49.6%,
-    rgba(180, 140, 255, 0.2) 50.8%,
-    transparent 51.6%);
-  opacity: var(--rain, 0); mix-blend-mode: screen; filter: blur(1.5px);
+  position: absolute; left: 50%; top: 5%; width: 128%; height: 32%;
+  transform: translateX(-50%);
+  /* Без режима наложения: на светлом небе screen выбеливал цвета и дуга пропадала */
+  opacity: var(--rain, 0);
+  filter: blur(2px) saturate(1.35) drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
   pointer-events: none; transition: opacity 1400ms ease;
 }
+[data-skin="b"] .b-rainbow svg { width: 100%; height: 100%; display: block; }
 
 /* лёгкая дымка в долине, чтобы кадр дышал */
 [data-skin="b"] .b-haze {
@@ -323,11 +317,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160218"></script>
-<script src="content-results.js?v=202609160218"></script>
-<script src="logic.js?v=202609160218"></script>
-<script src="miniapp.js?v=202609160218"></script>
-<script src="skin.js?v=202609160218"></script>
-<script src="tg-app.js?v=202609160218"></script>
+<script src="content-questions.js?v=202609160222"></script>
+<script src="content-results.js?v=202609160222"></script>
+<script src="logic.js?v=202609160222"></script>
+<script src="miniapp.js?v=202609160222"></script>
+<script src="skin.js?v=202609160222"></script>
+<script src="tg-app.js?v=202609160222"></script>
 </body>
 </html>

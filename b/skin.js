@@ -45,7 +45,15 @@ window.SKIN = (function () {
       '<div class="b-layer b-dawn"></div>' +
       '<div class="b-layer b-day"></div>' +
       '<div class="b-glow"></div>' +
-      '<div class="b-rainbow"></div>' +
+      '<div class="b-rainbow"><svg viewBox="0 0 120 62" preserveAspectRatio="none" aria-hidden="true">' +
+        '<defs><linearGradient id="b-rb" x1="0" y1="0" x2="1" y2="0">' +
+          '<stop offset="0" stop-color="#FF6B6B"/><stop offset="0.22" stop-color="#FFB14E"/>' +
+          '<stop offset="0.44" stop-color="#FFF275"/><stop offset="0.64" stop-color="#7EE68C"/>' +
+          '<stop offset="0.84" stop-color="#6FB7FF"/><stop offset="1" stop-color="#B98CFF"/>' +
+        '</linearGradient></defs>' +
+        '<path d="M6 60 A 54 46 0 0 1 114 60" fill="none" stroke="url(#b-rb)" stroke-width="6" stroke-linecap="round"/>' +
+        '<path d="M6 60 A 54 46 0 0 1 114 60" fill="none" stroke="#FFFFFF" stroke-width="1.2" opacity="0.22"/>' +
+      '</svg></div>' +
       '<div class="b-haze"></div>';
     // Рассвет и день подгружаем после старта, чтобы первый экран открывался быстро
     const later = [[".b-dawn", "assets/scene-rassvet.png"], [".b-day", "assets/scene-den.png"]];
