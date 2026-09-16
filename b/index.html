@@ -159,7 +159,8 @@
 
   html, body { margin: 0; padding: 0; background: var(--surface); }
   body { color: var(--ink); font: 15px/1.5 var(--body); }
-  .mini { height: var(--tg-viewport-stable-height, 100vh); min-height: 0; border: 0; border-radius: 0; }
+  /* Высоту задаёт tg-app.js на каждое изменение окна: при сворачивании Telegram меняет размер вебвью */
+  .mini { height: var(--app-h, var(--tg-viewport-stable-height, 100vh)); min-height: 0; border: 0; border-radius: 0; }
   .mini-head { display: none; }
   .mini-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
 /*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
@@ -292,11 +293,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160149"></script>
-<script src="content-results.js?v=202609160149"></script>
-<script src="logic.js?v=202609160149"></script>
-<script src="miniapp.js?v=202609160149"></script>
-<script src="skin.js?v=202609160149"></script>
-<script src="tg-app.js?v=202609160149"></script>
+<script src="content-questions.js?v=202609160156"></script>
+<script src="content-results.js?v=202609160156"></script>
+<script src="logic.js?v=202609160156"></script>
+<script src="miniapp.js?v=202609160156"></script>
+<script src="skin.js?v=202609160156"></script>
+<script src="tg-app.js?v=202609160156"></script>
 </body>
 </html>

@@ -22,8 +22,21 @@
     const bg = getComputedStyle(document.documentElement).getPropertyValue("--surface").trim();
     try { tg.setHeaderColor(bg); tg.setBackgroundColor(bg); } catch (e) {}
   }
+  // Высота окна: Telegram меняет её при сворачивании и разворачивании мини-аппа.
+  // Без пересчёта сцена остаётся прежней высоты и внизу появляется чёрная пустота.
+  function syncHeight() {
+    const h = (tg && (tg.viewportStableHeight || tg.viewportHeight)) || window.innerHeight;
+    document.documentElement.style.setProperty("--app-h", Math.round(h) + "px");
+  }
+  window.addEventListener("resize", syncHeight);
+  window.addEventListener("orientationchange", syncHeight);
+
   if (tg) {
     tg.ready(); tg.expand();
+    tg.onEvent("viewportChanged", syncHeight);
+  }
+  syncHeight();
+  if (tg) {
     const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
     if (u && u.first_name) S.user.first_name = u.first_name;
     tg.onEvent("themeChanged", applyTheme);
