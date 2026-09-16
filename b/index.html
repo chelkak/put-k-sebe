@@ -222,6 +222,10 @@ html:root[data-skin="b"] {
 [data-skin="b"] .mini-foot { position: relative; z-index: 3; background: transparent; border-top: 0; }
 [data-skin="b"] .mini-main { background: linear-gradient(135deg, #F3D68F, #E0A33F 55%, #A9721F); color: var(--accent-ink); font-weight: 700; }
 
+/* Логотип: чёрный фон исчезает благодаря режиму screen, остаётся золото */
+[data-skin="b"] .b-hero { display: grid; justify-items: center; }
+[data-skin="b"] .b-logo { width: 190px; max-width: 62%; height: auto; mix-blend-mode: screen; margin: 0 auto 2px; }
+[data-skin="b"] .b-logo-small { width: 120px; margin: 0 auto 10px; opacity: 0.9; }
 [data-skin="b"] .m-eyebrow { color: var(--accent); letter-spacing: 0.2em; }
 [data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
 [data-skin="b"] .m-lead { font-family: var(--display); font-size: 21px; line-height: 1.3; }
@@ -254,11 +258,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160049"></script>
-<script src="content-results.js?v=202609160049"></script>
-<script src="logic.js?v=202609160049"></script>
-<script src="miniapp.js?v=202609160049"></script>
-<script src="skin.js?v=202609160049"></script>
-<script src="tg-app.js?v=202609160049"></script>
+<script src="content-questions.js?v=202609160101"></script>
+<script src="content-results.js?v=202609160101"></script>
+<script src="logic.js?v=202609160101"></script>
+<script src="miniapp.js?v=202609160101"></script>
+<script src="skin.js?v=202609160101"></script>
+<script src="tg-app.js?v=202609160101"></script>
 </body>
 </html>

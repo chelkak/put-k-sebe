@@ -72,14 +72,29 @@ window.SKIN = (function () {
     return t;
   }
 
+  // Логотип Антона: версия на чёрном фоне, наложенная в режиме screen. Чёрное исчезает, золото остаётся.
+  function logo(cls) {
+    const img = el("img", cls);
+    img.src = "assets/logo.jpg";
+    img.alt = "Путь к себе";
+    img.decoding = "async";
+    img.onerror = () => img.remove();
+    return img;
+  }
+
   function hero() {
     apply(0);
-    const h = el("div");
-    h.append(el("p", "m-eyebrow", "Диагностика"), el("h2", "m-h1", "Путь к себе"));
+    const h = el("div", "b-hero");
+    const mark = logo("b-logo");
+    mark.onerror = () => { mark.remove(); h.append(el("h2", "m-h1", "Путь к себе")); };
+    h.append(mark);
     return h;
   }
 
-  function result() { apply(15, true); }
+  function result(b) {
+    apply(15, true);
+    if (b) b.prepend(logo("b-logo b-logo-small"));
+  }
 
   return { hero, progress, result };
 })();
