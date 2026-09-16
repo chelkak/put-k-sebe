@@ -83,7 +83,7 @@ window.SKIN = (function () {
     if (!show) { if (img) img.style.opacity = "0"; return; }
     if (!img) {
       img = el("img", "b-logo");
-      img.src = "assets/logo.jpg";
+      img.src = "assets/logo.png";                                    // с прозрачным фоном, ложится на любой кадр
       img.alt = "Путь к себе";
       img.decoding = "async";
       img.onerror = () => { img.remove(); if (fallbackHost) fallbackHost.append(el("h2", "m-h1", "Путь к себе")); };
@@ -102,7 +102,7 @@ window.SKIN = (function () {
 
   function result() {
     apply(15, true);
-    sceneLogo(false);
+    sceneLogo(true);          // с прозрачным фоном логотип уместен и на светлом кадре результата
   }
 
   return { hero, progress, result };
