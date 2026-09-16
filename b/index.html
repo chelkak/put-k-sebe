@@ -163,33 +163,51 @@
   .mini-head { display: none; }
   .mini-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
 /*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
-/* Вариант Б: путь к Питусираю. Сцена живёт за карточкой, свет ведёт от темноты к восходу.
-   Палитра снята с настоящих фотографий Антона: сухая охра, тёплая зелень, глубокая синева, рыжая тропа. */
+/* Вариант Б: три кадра одной сцены от Жоры (ночь, рассвет, день) плавно перетекают друг в друга.
+   Камера медленно отъезжает, свет доходит до полного солнца только на 15-м ответе. */
 html:root[data-skin="b"] {
-  --ground: #0A0907; --surface: #0C0B09; --sunk: #17130D; --line: #33291C;
-  --ink: #F4EDE0; --muted: #A99A83;
-  color-scheme: dark; --accent: #E0A33F; --accent-ink: #1A1206; --accent-soft: rgba(224, 163, 63, 0.18);
+  --ground: #0A0907; --surface: #090B12; --sunk: #17130D; --line: #33291C;
+  --ink: #F4EDE0; --muted: #A99A83; --accent: #E0A33F; --accent-ink: #1A1206;
+  --accent-soft: rgba(224, 163, 63, 0.18);
   --strong: #C8B25A; --improve: #D08F36; --attention: #C2603C;
-  --card: rgba(18, 15, 12, 0.72);
+  --card: rgba(14, 12, 10, 0.72);
   --display: "Cormorant Garamond", Georgia, serif;
   --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  /* Состояние света, их меняет skin.js на каждый ответ */
-  --sky-top: #07080F; --sky-mid: #0C1018; --sky-bot: #161311;
-  --glow: 0.05; --stars: 1; --sun-y: 150px; --sun-op: 0; --cam: 1; --fig-y: 0px; --fig-s: 1; --haze: 0.25;
+  --cam: 1.16; --night: 1; --dawn: 0; --day: 0; --haze: 0.2;
+  color-scheme: dark;
 }
-
 [data-skin="b"] body { background: var(--surface); }
-[data-skin="b"] .mini { position: relative; background: var(--surface); overflow: hidden; }
-[data-skin="b"] .b-scene { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-[data-skin="b"] .b-scene svg { width: 100%; height: 100%; display: block; }
+[data-skin="b"] .mini { position: relative; overflow: hidden; background: #090B12; }
+
+[data-skin="b"] .b-scene { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+[data-skin="b"] .b-layer {
+  position: absolute; inset: -3%;
+  background-size: cover; background-position: center 42%;
+  transform: scale(var(--cam));
+  transition: opacity 1100ms ease, transform 1100ms ease;
+  will-change: opacity, transform;
+}
+/* Ночь грузится сразу, рассвет и день подгружаются позже: иначе телефон тянет 7 МБ на старте */
+[data-skin="b"] .b-night { background-image: url("assets/scene-noch.png"); opacity: var(--night); }
+[data-skin="b"] .b-dawn  { opacity: var(--dawn); }
+[data-skin="b"] .b-day   { opacity: var(--day); }
+/* лёгкая дымка в долине, чтобы кадр дышал */
+[data-skin="b"] .b-haze {
+  position: absolute; left: -12%; right: -12%; top: 40%; height: 20%;
+  background: linear-gradient(to bottom, rgba(214, 205, 189, 0) 0%, rgba(214, 205, 189, 0.45) 50%, rgba(214, 205, 189, 0) 100%);
+  filter: blur(10px); opacity: var(--haze); transition: opacity 1200ms ease;
+  animation: bDrift 58s ease-in-out infinite alternate;
+}
+@keyframes bDrift { from { transform: translateX(-4%); } to { transform: translateX(4%); } }
+@media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-haze { animation: none; } }
+
+/* карточка снизу: сцена остаётся видимой сверху, пара идёт над ней */
 [data-skin="b"] .mini-body { position: relative; z-index: 2; justify-content: flex-end; padding: 18px 18px 22px; }
-/* Карточка интерфейса: нижняя часть экрана, сцена остаётся видимой сверху */
 [data-skin="b"] .mini::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 56%; z-index: 1;
-  background: linear-gradient(to bottom, transparent, var(--card) 12%, var(--card));
-  backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
-  border-top: 1px solid rgba(224, 163, 63, 0.18);
-  border-radius: 24px 24px 0 0;
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 52%; z-index: 1;
+  background: linear-gradient(to bottom, transparent, var(--card) 14%, var(--card));
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(224, 163, 63, 0.18); border-radius: 24px 24px 0 0;
 }
 [data-skin="b"] .mini-foot { position: relative; z-index: 3; background: transparent; border-top: 0; }
 [data-skin="b"] .mini-main { background: linear-gradient(135deg, #F3D68F, #E0A33F 55%, #A9721F); color: var(--accent-ink); font-weight: 700; }
@@ -198,14 +216,13 @@ html:root[data-skin="b"] {
 [data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
 [data-skin="b"] .m-lead { font-family: var(--display); font-size: 21px; line-height: 1.3; }
 [data-skin="b"] .m-muted, [data-skin="b"] .m-bar-t { color: var(--muted); }
-[data-skin="b"] .m-spheres { border-color: var(--line); }
-[data-skin="b"] .m-spheres li { border-color: var(--line); }
+[data-skin="b"] .m-spheres, [data-skin="b"] .m-spheres li { border-color: var(--line); }
 [data-skin="b"] .m-ticks i { height: 3px; background: rgba(244, 237, 224, 0.18); }
 [data-skin="b"] .m-ticks i.done { background: var(--accent); }
 [data-skin="b"] .m-ticks i.now { background: var(--accent); opacity: 0.45; }
 [data-skin="b"] .m-sphere b { color: var(--accent); }
 [data-skin="b"] .m-q { font-family: var(--display); font-size: 27px; font-weight: 600; line-height: 1.15; }
-[data-skin="b"] .m-opt { background: rgba(244, 237, 224, 0.06); border: 1px solid rgba(244, 237, 224, 0.14); border-radius: 13px; }
+[data-skin="b"] .m-opt { background: rgba(244, 237, 224, 0.07); border: 1px solid rgba(244, 237, 224, 0.15); border-radius: 13px; }
 [data-skin="b"] .m-opt:hover { border-color: var(--accent); }
 [data-skin="b"] .m-opt.picked { background: var(--accent-soft); border-color: var(--accent); }
 [data-skin="b"] .m-big b { font-family: var(--display); font-size: 62px; color: var(--accent); }
@@ -214,17 +231,6 @@ html:root[data-skin="b"] {
 [data-skin="b"] .m-note { background: var(--accent-soft); border: 1px solid rgba(224, 163, 63, 0.3); }
 [data-skin="b"] .m-track { background: rgba(244, 237, 224, 0.1); }
 [data-skin="b"] .m-ghost { color: var(--accent); border-color: rgba(224, 163, 63, 0.35); }
-
-/* Слои сцены двигаются с разной скоростью: это и есть отъезд камеры */
-.b-layer { transform-box: view-box; transform-origin: 50% 100%; transition: transform 900ms ease, opacity 900ms ease; }
-.b-sky-stars { transition: opacity 1200ms ease; }
-.b-sun-g { transition: transform 1100ms ease, opacity 1100ms ease; }
-.b-figures { transition: transform 1000ms ease, opacity 1000ms ease; }
-.b-haze { transition: opacity 1200ms ease; }
-.b-haze-1 { animation: bDrift 46s linear infinite; }
-.b-haze-2 { animation: bDrift 72s linear infinite reverse; }
-@keyframes bDrift { from { transform: translateX(-6%); } to { transform: translateX(6%); } }
-@media (prefers-reduced-motion: reduce) { .b-haze-1, .b-haze-2 { animation: none; } }
 
 </style>
 </head>
@@ -235,11 +241,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609152355"></script>
-<script src="content-results.js?v=202609152355"></script>
-<script src="logic.js?v=202609152355"></script>
-<script src="miniapp.js?v=202609152355"></script>
-<script src="skin.js?v=202609152355"></script>
-<script src="tg-app.js?v=202609152355"></script>
+<script src="content-questions.js?v=202609160009"></script>
+<script src="content-results.js?v=202609160009"></script>
+<script src="logic.js?v=202609160009"></script>
+<script src="miniapp.js?v=202609160009"></script>
+<script src="skin.js?v=202609160009"></script>
+<script src="tg-app.js?v=202609160009"></script>
 </body>
 </html>
