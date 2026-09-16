@@ -7,14 +7,13 @@ window.SKIN = (function () {
   const KEYS = [
     // Тёмная ночь только на первом вопросе, к восьмому уже полный день,
     // дальше день держится, дымка уходит, пара уходит вдаль.
-    { s: 0,  night: 1.00, dawn: 0.00, day: 0.00, haze: 0.18, glow: 0.06, rain: 0 },
-    { s: 2,  night: 0.70, dawn: 0.30, day: 0.05, haze: 0.26, glow: 0.30, rain: 0 },
-    { s: 4,  night: 0.30, dawn: 0.70, day: 0.25, haze: 0.32, glow: 0.55, rain: 0 },
-    { s: 6,  night: 0.05, dawn: 0.80, day: 0.60, haze: 0.28, glow: 0.80, rain: 0 },
-    { s: 8,  night: 0.00, dawn: 0.25, day: 1.00, haze: 0.18, glow: 1, rain: 0 },
-    { s: 11, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.10, glow: 1, rain: 0 },
-    { s: 13, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.06, glow: 1, rain: 0.55 },
-    { s: 15, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.00, glow: 1, rain: 0.85 }
+    { s: 0,  night: 1.00, dawn: 0.00, day: 0.00, haze: 0.18, glow: 0.06 },
+    { s: 2,  night: 0.70, dawn: 0.30, day: 0.05, haze: 0.26, glow: 0.30 },
+    { s: 4,  night: 0.30, dawn: 0.70, day: 0.25, haze: 0.32, glow: 0.55 },
+    { s: 6,  night: 0.05, dawn: 0.80, day: 0.60, haze: 0.28, glow: 0.80 },
+    { s: 8,  night: 0.00, dawn: 0.25, day: 1.00, haze: 0.18, glow: 1 },
+    { s: 11, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.10, glow: 1 },
+    { s: 15, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.00, glow: 1 }
   ];
   const mix = (a, b, t) => a + (b - a) * t;
 
@@ -23,7 +22,7 @@ window.SKIN = (function () {
     let i = 0; while (i < KEYS.length - 2 && s > KEYS[i + 1].s) i++;
     const a = KEYS[i], b = KEYS[i + 1], t = (s - a.s) / (b.s - a.s);
     const out = {};
-    for (const k of ["night", "dawn", "day", "haze", "glow", "rain"]) out[k] = mix(a[k], b[k], t);
+    for (const k of ["night", "dawn", "day", "haze", "glow"]) out[k] = mix(a[k], b[k], t);
     // В начале камера стоит у пары (сильное приближение), к концу отъезжает к горе.
     // Так пара с каждым ответом становится дальше и мельче, а долина раскрывается.
     const k = s / 15;
@@ -45,15 +44,6 @@ window.SKIN = (function () {
       '<div class="b-layer b-dawn"></div>' +
       '<div class="b-layer b-day"></div>' +
       '<div class="b-glow"></div>' +
-      '<div class="b-rainbow"><svg viewBox="0 0 120 62" preserveAspectRatio="none" aria-hidden="true">' +
-        '<defs><linearGradient id="b-rb" x1="0" y1="0" x2="1" y2="0">' +
-          '<stop offset="0" stop-color="#FF6B6B"/><stop offset="0.22" stop-color="#FFB14E"/>' +
-          '<stop offset="0.44" stop-color="#FFF275"/><stop offset="0.64" stop-color="#7EE68C"/>' +
-          '<stop offset="0.84" stop-color="#6FB7FF"/><stop offset="1" stop-color="#B98CFF"/>' +
-        '</linearGradient></defs>' +
-        '<path d="M6 60 A 54 46 0 0 1 114 60" fill="none" stroke="url(#b-rb)" stroke-width="6" stroke-linecap="round"/>' +
-        '<path d="M6 60 A 54 46 0 0 1 114 60" fill="none" stroke="#FFFFFF" stroke-width="1.2" opacity="0.22"/>' +
-      '</svg></div>' +
       '<div class="b-haze"></div>';
     // Рассвет и день подгружаем после старта, чтобы первый экран открывался быстро
     const later = [[".b-dawn", "assets/scene-rassvet.png"], [".b-day", "assets/scene-den.png"]];
@@ -78,7 +68,6 @@ window.SKIN = (function () {
     set("--cam", L.cam.toFixed(3));
     set("--pos-y", L.posY.toFixed(1) + "%");
     set("--glow", L.glow.toFixed(3));
-    set("--rain", L.rain.toFixed(3));        // радуга появляется к 13-му вопросу
     set("--k", (step / 15).toFixed(3));
     // Вспышка света в момент ответа: шаг становится заметным
     if (step > 0) {
