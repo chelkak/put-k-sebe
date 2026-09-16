@@ -209,6 +209,11 @@ html:root[data-skin="b"] {
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-top: 1px solid rgba(224, 163, 63, 0.18); border-radius: 24px 24px 0 0;
 }
+/* На результате текста много и он прокручивается: подложка на весь экран, иначе не читается на светлом кадре */
+[data-skin="b"] .mini.b-result::after {
+  height: 100%; border-radius: 0;
+  background: linear-gradient(to bottom, rgba(14, 12, 10, 0.5) 0%, rgba(14, 12, 10, 0.88) 18%, rgba(14, 12, 10, 0.94) 100%);
+}
 [data-skin="b"] .mini-foot { position: relative; z-index: 3; background: transparent; border-top: 0; }
 [data-skin="b"] .mini-main { background: linear-gradient(135deg, #F3D68F, #E0A33F 55%, #A9721F); color: var(--accent-ink); font-weight: 700; }
 
@@ -241,11 +246,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160009"></script>
-<script src="content-results.js?v=202609160009"></script>
-<script src="logic.js?v=202609160009"></script>
-<script src="miniapp.js?v=202609160009"></script>
-<script src="skin.js?v=202609160009"></script>
-<script src="tg-app.js?v=202609160009"></script>
+<script src="content-questions.js?v=202609160010"></script>
+<script src="content-results.js?v=202609160010"></script>
+<script src="logic.js?v=202609160010"></script>
+<script src="miniapp.js?v=202609160010"></script>
+<script src="skin.js?v=202609160010"></script>
+<script src="tg-app.js?v=202609160010"></script>
 </body>
 </html>

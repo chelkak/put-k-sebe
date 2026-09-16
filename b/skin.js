@@ -43,10 +43,11 @@ window.SKIN = (function () {
     return scene;
   }
 
-  function apply(step) {
+  function apply(step, isResult) {
     const box = document.getElementById("mini");
     const s = ensureScene();
     if (s.parentNode !== box) box.prepend(s);
+    box.classList.toggle("b-result", !!isResult);
     const L = light(step), set = (k, v) => box.style.setProperty(k, v);
     set("--night", L.night.toFixed(3));
     set("--dawn", L.dawn.toFixed(3));
@@ -71,7 +72,7 @@ window.SKIN = (function () {
     return h;
   }
 
-  function result() { apply(15); }
+  function result() { apply(15, true); }
 
   return { hero, progress, result };
 })();
