@@ -207,6 +207,17 @@ html:root[data-skin="b"] {
 @keyframes bFlash { 0% { filter: brightness(1); } 32% { filter: brightness(1.22) saturate(1.12); } 100% { filter: brightness(1); } }
 @media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-scene.is-pulse .b-layer { animation: none; } }
 
+/* Радуга над долиной: появляется к 13-му вопросу, к финалу становится ярче */
+/* Настоящая радуга с фотографии Антона: ложится добавочным светом, как в жизни */
+[data-skin="b"] .b-rainbow {
+  position: absolute; left: 44%; top: -6%; width: 230%; height: auto;
+  transform: translateX(-50%) rotate(-5deg);
+  opacity: var(--rain, 0); mix-blend-mode: screen;
+  filter: saturate(1.15) blur(0.4px);
+  pointer-events: none; transition: opacity 1400ms ease;
+}
+[data-skin="b"] .b-rainbow img { width: 100%; height: auto; display: block; }
+
 /* лёгкая дымка в долине, чтобы кадр дышал */
 [data-skin="b"] .b-haze {
   position: absolute; left: -12%; right: -12%; top: 40%; height: 20%;
@@ -306,11 +317,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160211"></script>
-<script src="content-results.js?v=202609160211"></script>
-<script src="logic.js?v=202609160211"></script>
-<script src="miniapp.js?v=202609160211"></script>
-<script src="skin.js?v=202609160211"></script>
-<script src="tg-app.js?v=202609160211"></script>
+<script src="content-questions.js?v=202609160231"></script>
+<script src="content-results.js?v=202609160231"></script>
+<script src="logic.js?v=202609160231"></script>
+<script src="miniapp.js?v=202609160231"></script>
+<script src="skin.js?v=202609160231"></script>
+<script src="tg-app.js?v=202609160231"></script>
 </body>
 </html>
