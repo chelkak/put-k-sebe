@@ -35,6 +35,7 @@ window.MINI = (function () {
   // ---------- главный экран, 8.4 ----------
   function show() {
     const { C, T, active, lastDone } = A();
+    if (H().enter) H().enter();          // сцена должна быть и на экранах «Продолжим?» и «С возвращением»
     const a = active(), d = lastDone(), b = screen();
     if (a) {
       const n = Object.keys(a.answers).length;

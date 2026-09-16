@@ -95,6 +95,12 @@ window.SKIN = (function () {
     img.style.opacity = "";
   }
 
+  // Вызывается на всех входных экранах: продолжить, с возвращением, подтверждение перезапуска.
+  function enter() {
+    apply(0);
+    sceneLogo("big");
+  }
+
   function hero() {
     apply(0);
     const h = el("div", "b-hero");
@@ -108,5 +114,5 @@ window.SKIN = (function () {
     sceneLogo("big");         // с прозрачным фоном логотип уместен и на светлом кадре результата
   }
 
-  return { hero, progress, result };
+  return { enter, hero, progress, result };
 })();
