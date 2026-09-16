@@ -72,28 +72,33 @@ window.SKIN = (function () {
     return t;
   }
 
-  // Логотип Антона: версия на чёрном фоне, наложенная в режиме screen. Чёрное исчезает, золото остаётся.
-  function logo(cls) {
-    const img = el("img", cls);
-    img.src = "assets/logo.jpg";
-    img.alt = "Путь к себе";
-    img.decoding = "async";
-    img.onerror = () => img.remove();
-    return img;
+  // Логотип Антона кладём в слой сцены: там режим screen убирает чёрный фон и остаётся одно золото.
+  function sceneLogo(show, fallbackHost) {
+    const s = ensureScene();
+    let img = s.querySelector(".b-logo");
+    if (!show) { if (img) img.style.opacity = "0"; return; }
+    if (!img) {
+      img = el("img", "b-logo");
+      img.src = "assets/logo.jpg";
+      img.alt = "Путь к себе";
+      img.decoding = "async";
+      img.onerror = () => { img.remove(); if (fallbackHost) fallbackHost.append(el("h2", "m-h1", "Путь к себе")); };
+      s.append(img);
+    }
+    img.style.opacity = "";
   }
 
   function hero() {
     apply(0);
     const h = el("div", "b-hero");
-    const mark = logo("b-logo");
-    mark.onerror = () => { mark.remove(); h.append(el("h2", "m-h1", "Путь к себе")); };
-    h.append(mark);
+    h.append(el("p", "m-eyebrow", "Диагностика"));
+    sceneLogo(true, h);
     return h;
   }
 
-  function result(b) {
+  function result() {
     apply(15, true);
-    if (b) b.prepend(logo("b-logo b-logo-small"));
+    sceneLogo(true);
   }
 
   return { hero, progress, result };
