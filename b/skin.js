@@ -20,7 +20,11 @@ window.SKIN = (function () {
     const a = KEYS[i], b = KEYS[i + 1], t = (s - a.s) / (b.s - a.s);
     const out = {};
     for (const k of ["night", "dawn", "day", "haze"]) out[k] = mix(a[k], b[k], t);
-    out.cam = mix(1.16, 1, s / 15);            // камера отъезжает, пара уходит вглубь
+    // В начале камера стоит у пары (сильное приближение), к концу отъезжает к горе.
+    // Так пара с каждым ответом становится дальше и мельче, а долина раскрывается.
+    const k = s / 15;
+    out.cam = mix(1.75, 1, k * k * (3 - 2 * k));   // мягкое замедление к концу
+    out.posY = mix(62, 44, k);                     // и кадр поднимается от тропы к вершине
     return out;
   }
 
@@ -54,6 +58,7 @@ window.SKIN = (function () {
     set("--day", L.day.toFixed(3));
     set("--haze", L.haze.toFixed(2));
     set("--cam", L.cam.toFixed(3));
+    set("--pos-y", L.posY.toFixed(1) + "%");
     // чем светлее сцена, тем плотнее карточка: текст должен читаться и на рассвете
     set("--card", `rgba(14, 12, 10, ${(0.66 + 0.2 * (step / 15)).toFixed(2)})`);
   }
