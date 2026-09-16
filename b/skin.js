@@ -67,6 +67,7 @@ window.SKIN = (function () {
 
   function progress(done) {
     apply(done);
+    sceneLogo("mark");                                   // на вопросах логотип живёт водяным знаком в углу
     const t = el("div", "m-ticks");
     for (let i = 0; i < 15; i++) t.append(el("i", i < done ? "done" : i === done ? "now" : ""));
     return t;
@@ -76,11 +77,12 @@ window.SKIN = (function () {
   // На тёмной сцене чёрный фон логотипа исчезает в режиме screen. На светлом кадре результата он вылезет
   // квадратом, поэтому там логотип прячем до файла с настоящей прозрачностью.
   const LOGO_READY = true;
-  function sceneLogo(show, fallbackHost) {
+  // mode: "big" на старте и результате, "mark" водяным знаком в углу на вопросах, "none" спрятать.
+  function sceneLogo(mode, fallbackHost) {
     if (!LOGO_READY) return;
     const s = ensureScene();
     let img = s.querySelector(".b-logo");
-    if (!show) { if (img) img.style.opacity = "0"; return; }
+    if (mode === "none") { if (img) img.style.opacity = "0"; return; }
     if (!img) {
       img = el("img", "b-logo");
       img.src = "assets/logo.png";                                    // с прозрачным фоном, ложится на любой кадр
@@ -89,6 +91,7 @@ window.SKIN = (function () {
       img.onerror = () => { img.remove(); if (fallbackHost) fallbackHost.append(el("h2", "m-h1", "Путь к себе")); };
       s.append(img);
     }
+    img.classList.toggle("is-mark", mode === "mark");
     img.style.opacity = "";
   }
 
@@ -96,13 +99,13 @@ window.SKIN = (function () {
     apply(0);
     const h = el("div", "b-hero");
     h.append(el("p", "m-eyebrow", "Диагностика"));
-    sceneLogo(true, h);
+    sceneLogo("big", h);
     return h;
   }
 
   function result() {
     apply(15, true);
-    sceneLogo(true);          // с прозрачным фоном логотип уместен и на светлом кадре результата
+    sceneLogo("big");         // с прозрачным фоном логотип уместен и на светлом кадре результата
   }
 
   return { hero, progress, result };
