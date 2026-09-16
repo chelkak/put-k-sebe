@@ -196,7 +196,7 @@ html:root[data-skin="b"] {
 [data-skin="b"] .b-day   { opacity: var(--day); }
 /* Свечение солнца: растёт с каждым ответом, поэтому шаг света заметен сразу */
 [data-skin="b"] .b-glow {
-  position: absolute; left: 52%; top: 24%; width: 160%; aspect-ratio: 1;
+  position: absolute; left: 44%; top: calc(34% - 16% * var(--k, 0)); width: 150%; aspect-ratio: 1;
   transform: translate(-50%, -50%) scale(calc(0.55 + 0.55 * var(--k, 0)));
   background: radial-gradient(circle, rgba(255, 219, 150, 0.6) 0%, rgba(243, 172, 70, 0.28) 34%, rgba(243, 172, 70, 0) 68%);
   opacity: var(--glow, 0); mix-blend-mode: screen; pointer-events: none;
@@ -306,11 +306,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160200"></script>
-<script src="content-results.js?v=202609160200"></script>
-<script src="logic.js?v=202609160200"></script>
-<script src="miniapp.js?v=202609160200"></script>
-<script src="skin.js?v=202609160200"></script>
-<script src="tg-app.js?v=202609160200"></script>
+<script src="content-questions.js?v=202609160201"></script>
+<script src="content-results.js?v=202609160201"></script>
+<script src="logic.js?v=202609160201"></script>
+<script src="miniapp.js?v=202609160201"></script>
+<script src="skin.js?v=202609160201"></script>
+<script src="tg-app.js?v=202609160201"></script>
 </body>
 </html>
