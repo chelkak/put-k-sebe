@@ -353,15 +353,17 @@ html:root[data-skin="b"] {
 /* Варианты на вопросах Антона (data-variant, 17.09). Его вопросы и ответы в два-три раза длиннее наших:
    вопрос вылезал выше подложки прямо на логотип. Подложка выше, шрифт чуть плотнее, водяной знак меньше.
    Бот (/b/) эти правила не задевают. */
-[data-skin="b"][data-variant] .mini::after { height: 74%; }
-[data-skin="b"][data-variant] .mini-body::before { flex-basis: 22%; }
+[data-skin="b"][data-variant] .mini:has(.m-q)::after { height: 74%; }
+[data-skin="b"][data-variant] .mini-body:has(.m-q)::before { flex-basis: 22%; }
+/* Подложка и подъём текста только на экранах вопросов: раньше правило задевало и стартовый экран,
+   текст уезжал вверх и «Диагностика» наезжала на подпись логотипа (замечание Антона, 17.09) */
 [data-skin="b"][data-variant] .m-q { font-size: 25px; line-height: 1.15; }
 [data-skin="b"][data-variant] .m-opts { gap: 7px; }
 [data-skin="b"][data-variant] .m-opt { font-size: 15.5px; line-height: 1.32; padding: 11px 13px; }
 [data-skin="b"][data-variant] .b-scene .b-logo.is-mark { width: 128px; opacity: 0.32; }
 @media (max-height: 780px) {
-  [data-skin="b"][data-variant] .mini::after { height: 84%; }
-  [data-skin="b"][data-variant] .mini-body::before { flex-basis: 12%; }
+  [data-skin="b"][data-variant] .mini:has(.m-q)::after { height: 84%; }
+  [data-skin="b"][data-variant] .mini-body:has(.m-q)::before { flex-basis: 12%; }
   [data-skin="b"][data-variant] .m-q { font-size: 22px; }
   [data-skin="b"][data-variant] .m-opt { font-size: 14.5px; padding: 9px 12px; }
   [data-skin="b"][data-variant] .b-scene .b-logo.is-mark { width: 104px; }
@@ -382,6 +384,13 @@ html:root[data-skin="b"] {
   [data-skin="b"] .m-sphere-intro { font-size: 14.5px; line-height: 1.45; }
 }
 
+/* «Диагностика» на старте второго бота на лёгкой полупрозрачной плашке, как подпись сферы:
+   логотип пусть сливается со сценой, а это слово должно читаться (Антон, 17.09) */
+[data-skin="b"][data-variant] .b-hero .m-eyebrow {
+  background: rgba(12, 10, 8, 0.45); border-radius: 8px; padding: 5px 11px 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 </style>
 </head>
 <body>
@@ -391,13 +400,13 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609162140"></script>
-<script src="content-sfery-anton.js?v=202609162140"></script>
-<script src="content-questions-anton.js?v=202609162140"></script>
-<script src="content-results.js?v=202609162140"></script>
-<script src="logic.js?v=202609162140"></script>
-<script src="miniapp.js?v=202609162140"></script>
-<script src="skin.js?v=202609162140"></script>
-<script src="tg-app.js?v=202609162140"></script>
+<script src="content-questions.js?v=202609162233"></script>
+<script src="content-sfery-anton.js?v=202609162233"></script>
+<script src="content-questions-anton.js?v=202609162233"></script>
+<script src="content-results.js?v=202609162233"></script>
+<script src="logic.js?v=202609162233"></script>
+<script src="miniapp.js?v=202609162233"></script>
+<script src="skin.js?v=202609162233"></script>
+<script src="tg-app.js?v=202609162233"></script>
 </body>
 </html>
