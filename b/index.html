@@ -234,12 +234,10 @@ html:root[data-skin="b"] {
   opacity: 1; pointer-events: none;
   transition: opacity 600ms ease, width 600ms ease, top 600ms ease, left 600ms ease;
 }
-/* Водяной знак на вопросах: как маркировка у новостных каналов, узнаваемо и не мешает читать */
+/* Водяной знак на вопросах: то же место и тот же размер, что на старте, только полупрозрачный */
 [data-skin="b"] .b-scene .b-logo.is-mark {
-  width: 104px; max-width: 34%;
-  top: 10px; left: 14px; transform: none;
-  opacity: 0.62;
-  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.7));
+  opacity: 0.42;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
 }
 [data-skin="b"] .m-eyebrow { color: var(--accent); letter-spacing: 0.2em; }
 [data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
@@ -279,11 +277,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160116"></script>
-<script src="content-results.js?v=202609160116"></script>
-<script src="logic.js?v=202609160116"></script>
-<script src="miniapp.js?v=202609160116"></script>
-<script src="skin.js?v=202609160116"></script>
-<script src="tg-app.js?v=202609160116"></script>
+<script src="content-questions.js?v=202609160118"></script>
+<script src="content-results.js?v=202609160118"></script>
+<script src="logic.js?v=202609160118"></script>
+<script src="miniapp.js?v=202609160118"></script>
+<script src="skin.js?v=202609160118"></script>
+<script src="tg-app.js?v=202609160118"></script>
 </body>
 </html>
