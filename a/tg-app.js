@@ -4,7 +4,10 @@
   const tg = window.Telegram && window.Telegram.WebApp;
   const C = window.CONTENT, L = window.LOGIC;
   const SKIN = document.documentElement.dataset.skin || "base";          // base, a или b: у каждого своя память
-  const BASE_KEY = SKIN === "base" ? "pks_tg_v1" : "pks_tg_v1_" + SKIN;
+  // Варианты для сравнения живут на том же адресе и с тем же лицом, но с другими вопросами:
+  // память у каждого своя, иначе ответы из бота подхватились бы в чужой вариант.
+  const VARIANT = document.documentElement.dataset.variant || "";
+  const BASE_KEY = (SKIN === "base" ? "pks_tg_v1" : "pks_tg_v1_" + SKIN) + (VARIANT ? "_" + VARIANT : "");
   // К ключу добавляем номер аккаунта Telegram: на одном телефоне аккаунтов может быть несколько,
   // а хранилище у вебвью общее, и второй увидел бы диагностику первого.
   const UID = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || 0;

@@ -46,6 +46,7 @@ Object.assign(window.CONTENT, {
     BTN_CONFIRM_RESTART: "Да, начать заново",
     BTN_CANCEL_RESTART: "Отмена",
     BTN_NEXT_BLOCK: "Поехали",
+    BTN_BLOCK_START: "К вопросам",
     BTN_SHOW_RESULT: "Показать результат",
     BTN_PERSONAL_ANALYSIS: "Персональный разбор",
     BTN_OVERVIEW: "Общая картина",

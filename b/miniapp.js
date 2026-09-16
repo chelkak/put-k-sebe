@@ -10,7 +10,15 @@ window.MINI = (function () {
   const nextQ = (s) => A().C.QUESTIONS.find((q) => !s.answers[q.id]);
   const paragraphs = (text, cls = "m-p") => (text || "").split("\n\n").filter(Boolean).map((p) => el("p", cls, p));
 
-  function screen() { const b = $("mini-body"); b.textContent = ""; b.scrollTop = 0; return b; }
+  // Вступительная карточка перед каждой сферой. Включается только там, где у страницы стоит data-intro="1"
+  // (вариант для сравнения, 17.09). В боте её нет, пока Антон не выберет.
+  const withIntro = () => document.documentElement.dataset.intro === "1";
+
+  function screen() {
+    const b = $("mini-body"); b.textContent = ""; b.scrollTop = 0;
+    const box = $("mini"); if (box) box.classList.remove("is-intro");
+    return b;
+  }
   function main(label, fn) {
     const b = $("mini-main");
     if (!label) { b.hidden = true; b.onclick = null; return; }
@@ -94,6 +102,8 @@ window.MINI = (function () {
     const q = nextQ(s);
     if (!q) return analyzing(s);
     const n = C.QUESTIONS.indexOf(q), sp = sphere(q.sphere);
+    const firstOfSphere = C.QUESTIONS.find((x) => x.sphere === q.sphere) === q;
+    if (withIntro() && firstOfSphere && !(s.introShown || {})[q.sphere] && C.TEXT[`BLOCK_${sp.key}_THOUGHT`]) return sphereIntro(s, q);
     const b = screen(); main(null);
     // Сфера тихой строкой над вопросом, без отдельных экранов (Антон и Александр, 15.09).
     // Только название сферы: пояснение переносилось на две строки и налезало на счётчик (16.09).
@@ -120,6 +130,24 @@ window.MINI = (function () {
       opts.append(o);
     });
     b.append(opts, el("p", "m-muted", "Ответ сохраняется сразу, можно закрыть и вернуться."));
+  }
+
+  // Карточка сферы: шаг, название, главная мысль крупно, вступление Антона. Отмечается просмотренной
+  // только по кнопке, поэтому если закрыть приложение на карточке, после возврата она покажется снова.
+  function sphereIntro(s, q) {
+    const { C, T, sphere, save, event } = A();
+    const sp = sphere(q.sphere), n = C.QUESTIONS.indexOf(q), i = C.SPHERES.indexOf(sp);
+    const b = screen(); main(null);
+    const box = $("mini"); if (box) box.classList.add("is-intro");
+    const label = el("span", "m-sphere"); label.append(el("b", "", `Шаг ${i + 1} из 5`));
+    const meta = el("div", "m-qmeta"); meta.append(label);
+    b.append(ticks(n), meta, el("h2", "m-h1 m-intro-title", sp.name),
+      el("p", "m-lead m-thought", T(`BLOCK_${sp.key}_THOUGHT`, s)), ...paragraphs(T(`BLOCK_${sp.key}_INTRO`, s), "m-p m-sphere-intro"));
+    main(C.BUTTON.BTN_BLOCK_START || "К вопросам", () => {
+      s.introShown = s.introShown || {}; s.introShown[q.sphere] = true; save();
+      event("block_intro_viewed", sp.name);
+      question(s);
+    });
   }
 
   function analyzing(s) {

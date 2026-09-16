@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-variant="anton2" data-intro="1" data-skin="b">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 
   :root {
@@ -181,6 +182,206 @@
   .mini-body { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   /* Экран погас или мини-апп свёрнут: кружок ожидания тоже должен встать, он крутился в фоне */
   html.is-hidden .m-pulse { animation: none !important; }
+/*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
+/* Вариант Б: три кадра одной сцены от Жоры (ночь, рассвет, день) плавно перетекают друг в друга.
+   Камера медленно отъезжает, свет доходит до полного солнца только на 15-м ответе. */
+html:root[data-skin="b"] {
+  --ground: #0A0907; --surface: #090B12; --sunk: #17130D; --line: #33291C;
+  --ink: #F4EDE0; --muted: #A99A83; --accent: #E0A33F; --accent-ink: #1A1206;
+  --accent-soft: rgba(224, 163, 63, 0.18);
+  --strong: #C8B25A; --improve: #D08F36; --attention: #C2603C;
+  --card: rgba(14, 12, 10, 0.72);
+  --display: "Cormorant Garamond", Georgia, serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cam: 1.16; --night: 1; --dawn: 0; --day: 0; --haze: 0.2;
+  color-scheme: dark;
+}
+[data-skin="b"] body { background: var(--surface); }
+[data-skin="b"] .mini { position: relative; overflow: hidden; background: #090B12; }
+
+[data-skin="b"] .b-scene { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+/* Камера стоит у пары и с каждым ответом отъезжает к горе: пара уходит вдаль */
+[data-skin="b"] .b-layer {
+  position: absolute; inset: -3%;
+  background-size: cover; background-position: center var(--pos-y, 58%);
+  transform: scale(var(--cam));
+  transform-origin: 38% 100%;   /* растём от нижнего края: пара поднимается над карточкой, текст не двигаем */
+  transition: opacity 1100ms ease, transform 1400ms cubic-bezier(0.25, 0.8, 0.3, 1), background-position 1400ms ease;
+  /* will-change убран намеренно: он держал три больших слоя в видеопамяти постоянно,
+     из-за этого после разблокировки телефона вебвью подвисал при восстановлении графики */
+}
+/* Ночь грузится сразу, рассвет и день подгружаются позже: иначе телефон тянет 7 МБ на старте */
+[data-skin="b"] .b-night { background-image: url("assets/scene-noch.jpg"); opacity: var(--night); }
+[data-skin="b"] .b-dawn  { opacity: var(--dawn); }
+[data-skin="b"] .b-day   { opacity: var(--day); }
+/* Свечение солнца: растёт с каждым ответом, поэтому шаг света заметен сразу */
+[data-skin="b"] .b-glow {
+  position: absolute; left: 44%; top: calc(34% - 16% * var(--k, 0)); width: 150%; aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(calc(0.55 + 0.55 * var(--k, 0)));
+  background: radial-gradient(circle, rgba(255, 219, 150, 0.6) 0%, rgba(243, 172, 70, 0.28) 34%, rgba(243, 172, 70, 0) 68%);
+  opacity: var(--glow, 0); mix-blend-mode: screen; pointer-events: none;
+  transition: opacity 900ms ease, transform 1200ms ease;
+}
+/* Короткая вспышка в момент ответа: свет «пробивается», шаг виден */
+/* Осветление идёт одним проходом по всей сцене, а не по каждой фотографии отдельно:
+   раньше телефон на каждый ответ обрабатывал три полноэкранных кадра сразу */
+[data-skin="b"] .b-scene.is-pulse { animation: bFlash 760ms ease; }
+@keyframes bFlash { 0% { filter: brightness(1); } 32% { filter: brightness(1.22) saturate(1.12); } 100% { filter: brightness(1); } }
+@media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-scene.is-pulse .b-layer { animation: none; } }
+
+/* Радуга над долиной: появляется к 13-му вопросу, к финалу становится ярче */
+/* Настоящая радуга с фотографии Антона: ложится добавочным светом, как в жизни */
+[data-skin="b"] .b-rainbow {
+  position: absolute; left: 44%; top: -6%; width: 230%; height: auto;
+  transform: translateX(-50%) rotate(-5deg);
+  opacity: var(--rain, 0); mix-blend-mode: screen;
+  filter: saturate(1.15) blur(0.4px);
+  pointer-events: none; transition: opacity 1400ms ease;
+}
+[data-skin="b"] .b-rainbow img { width: 100%; height: auto; display: block; }
+/* Пока радуги нет, слой вообще выключен: прозрачный слой с режимом screen всё равно
+   заставлял телефон смешивать картинку во весь экран на каждом кадре */
+[data-skin="b"] .b-rainbow { display: none; }
+[data-skin="b"] .mini.has-rain .b-rainbow { display: block; }
+
+/* лёгкая дымка в долине, чтобы кадр дышал */
+[data-skin="b"] .b-haze {
+  position: absolute; left: -12%; right: -12%; top: 40%; height: 20%;
+  background: linear-gradient(to bottom, rgba(214, 205, 189, 0) 0%, rgba(214, 205, 189, 0.45) 50%, rgba(214, 205, 189, 0) 100%);
+  /* blur убран: градиент и так мягкий, а размытие заставляло телефон перерисовывать слой каждый кадр */
+  opacity: var(--haze); transition: opacity 1200ms ease;
+  animation: bDrift 58s ease-in-out infinite alternate;
+}
+@keyframes bDrift { from { transform: translateX(-4%); } to { transform: translateX(4%); } }
+@media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-haze { animation: none; } }
+/* Экран заблокирован или мини-апп свёрнут: гасим анимации, чтобы вебвью не грузился впустую */
+/* Гасим всю сцену целиком, а не отдельные слои: раньше правило было написано с ошибкой
+   и заодно продолжали работать переходы свечения, радуги и логотипа */
+[data-skin="b"].is-hidden .b-scene,
+[data-skin="b"].is-hidden .b-scene * { animation: none !important; transition: none !important; }
+
+/* карточка снизу: сцена остаётся видимой сверху, пара идёт над ней */
+/* Вопрос начинается у верхней кромки карточки, а не жмётся к низу экрана */
+[data-skin="b"] .mini-body { position: relative; z-index: 2; justify-content: flex-start; padding: 18px 18px 22px; }
+/* Распорка поднимает вопрос к верхней кромке карточки, но сжимается, если текста много:
+   иначе на вытянутых экранах вопрос уезжал вниз и приходилось скроллить */
+[data-skin="b"] .mini-body::before { content: ""; flex: 0 1 42%; min-height: 0; }
+[data-skin="b"] .mini.b-result .mini-body::before { display: none; }
+/* Без размытия: фотография должна оставаться чёткой, подложка просто плотная */
+[data-skin="b"] .mini::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 54%; z-index: 1;
+  background: linear-gradient(to bottom, rgba(14, 12, 10, 0) 0%, var(--card) 16%, var(--card) 100%);
+  border-top: 0; border-radius: 0;
+}
+/* На результате текста много и он прокручивается: подложка на весь экран, иначе не читается на светлом кадре */
+[data-skin="b"] .mini.b-result::after {
+  height: 100%; border-radius: 0;
+  background: linear-gradient(to bottom, rgba(14, 12, 10, 0.5) 0%, rgba(14, 12, 10, 0.88) 18%, rgba(14, 12, 10, 0.94) 100%);
+}
+[data-skin="b"] .mini-foot { position: relative; z-index: 3; background: transparent; border-top: 0; }
+[data-skin="b"] .mini-main { background: linear-gradient(135deg, #F3D68F, #E0A33F 55%, #A9721F); color: var(--accent-ink); font-weight: 700; }
+
+/* Логотип живёт в слое сцены: только там режим screen убирает чёрный фон и остаётся золото.
+   Внутри карточки наложение изолируется и получается тёмный квадрат. */
+[data-skin="b"] .b-hero { display: grid; justify-items: center; }
+[data-skin="b"] .b-scene .b-logo {
+  position: absolute; top: 2%; left: 50%; transform: translateX(-50%);
+  width: 230px; max-width: 66%; height: auto;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 22px rgba(224, 163, 63, 0.25));
+  opacity: 1; pointer-events: none;
+  transition: opacity 600ms ease, width 600ms ease, top 600ms ease, left 600ms ease;
+}
+/* Водяной знак на вопросах: то же место и тот же размер, что на старте, только полупрозрачный */
+[data-skin="b"] .b-scene .b-logo.is-mark {
+  opacity: 0.42;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+/* Низкие экраны: логотип уменьшается, текст уплотняется, чтобы ничего не наслаивалось */
+@media (max-height: 780px) {
+  [data-skin="b"] .b-scene .b-logo { width: 168px; top: 1%; }
+  [data-skin="b"] .m-lead { font-size: 19px; }
+  [data-skin="b"] .m-p, [data-skin="b"] .m-note { font-size: 14px; line-height: 1.4; }
+  [data-skin="b"] .mini-body { padding: 14px 16px 18px; gap: 12px; }
+}
+@media (max-height: 680px) {
+  [data-skin="b"] .b-scene .b-logo { width: 132px; }
+  [data-skin="b"] .m-q { font-size: 25px; }
+  [data-skin="b"] .m-opt { font-size: 15px; padding: 11px 12px; }
+  [data-skin="b"] .m-spheres li { font-size: 12px; padding: 3px 9px; }
+}
+[data-skin="b"] .m-eyebrow { color: var(--accent); letter-spacing: 0.2em; }
+[data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
+[data-skin="b"] .m-lead { font-family: var(--display); font-size: 21px; line-height: 1.3; }
+[data-skin="b"] .m-muted, [data-skin="b"] .m-bar-t { color: var(--muted); }
+/* Сферы остаются на старте (человек должен понимать, о чём речь), но компактно, строкой,
+   чтобы экран помещался целиком и свайпать не приходилось */
+[data-skin="b"] .m-spheres { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; border: 0; margin: 4px 0 0; padding: 0; }
+[data-skin="b"] .m-spheres li {
+  display: inline-flex; border: 1px solid rgba(224, 163, 63, 0.38); border-radius: 99px;
+  padding: 4px 11px; font-size: 13px; color: #F1E6D3; background: rgba(224, 163, 63, 0.1);
+}
+[data-skin="b"] .m-spheres li span:last-child { display: none; }
+[data-skin="b"] .m-ticks i { height: 3px; background: rgba(244, 237, 224, 0.18); }
+[data-skin="b"] .m-ticks i.done { background: var(--accent); }
+[data-skin="b"] .m-ticks i.now { background: var(--accent); opacity: 0.45; }
+/* Крупнее и контрастнее: на фотографии мелкий белый текст читался плохо */
+/* Полупрозрачная тёмная плашка за подписью сферы: буквы читаются на любом кадре */
+[data-skin="b"] .m-sphere {
+  background: rgba(12, 10, 8, 0.3);
+  border-radius: 8px; padding: 2px 8px;
+}
+/* Подпись сферы должна цеплять взгляд: жирнее, ярче и с мягким тёмным ореолом поверх фотографии */
+[data-skin="b"] .m-sphere b {
+  color: #F5C167; font-size: 15px; font-weight: 700; letter-spacing: 0.07em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 10px rgba(0, 0, 0, 0.35);
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.22);
+}
+[data-skin="b"] .m-count { font-size: 14px; color: #D9CDBA; }
+[data-skin="b"] .m-q { font-family: var(--display); font-size: 30px; font-weight: 600; line-height: 1.12; color: #FFF8EC; }
+[data-skin="b"] .m-opt { font-size: 17px; color: #FBF4E6; background: rgba(28, 23, 18, 0.55); border: 1px solid rgba(244, 237, 224, 0.28); border-radius: 13px; }
+/* Подсветку по наведению включаем только там, где есть мышь: на телефоне она залипала после тапа */
+@media (hover: hover) { [data-skin="b"] .m-opt:hover { border-color: var(--accent); } }
+[data-skin="b"] .m-opt.picked { background: var(--accent-soft); border-color: var(--accent); }
+[data-skin="b"] .m-big b { font-family: var(--display); font-size: 62px; color: var(--accent); }
+[data-skin="b"] .m-sec { border-top-color: rgba(244, 237, 224, 0.12); }
+[data-skin="b"] .m-sec h3 { color: var(--accent); }
+[data-skin="b"] .m-note { background: var(--accent-soft); border: 1px solid rgba(224, 163, 63, 0.3); }
+[data-skin="b"] .m-track { background: rgba(244, 237, 224, 0.1); }
+[data-skin="b"] .m-ghost { color: var(--accent); border-color: rgba(224, 163, 63, 0.35); }
+
+/* Варианты на вопросах Антона (data-variant, 17.09). Его вопросы и ответы в два-три раза длиннее наших:
+   вопрос вылезал выше подложки прямо на логотип. Подложка выше, шрифт чуть плотнее, водяной знак меньше.
+   Бот (/b/) эти правила не задевают. */
+[data-skin="b"][data-variant] .mini::after { height: 74%; }
+[data-skin="b"][data-variant] .mini-body::before { flex-basis: 22%; }
+[data-skin="b"][data-variant] .m-q { font-size: 25px; line-height: 1.15; }
+[data-skin="b"][data-variant] .m-opts { gap: 7px; }
+[data-skin="b"][data-variant] .m-opt { font-size: 15.5px; line-height: 1.32; padding: 11px 13px; }
+[data-skin="b"][data-variant] .b-scene .b-logo.is-mark { width: 128px; opacity: 0.32; }
+@media (max-height: 780px) {
+  [data-skin="b"][data-variant] .mini::after { height: 84%; }
+  [data-skin="b"][data-variant] .mini-body::before { flex-basis: 12%; }
+  [data-skin="b"][data-variant] .m-q { font-size: 22px; }
+  [data-skin="b"][data-variant] .m-opt { font-size: 14.5px; padding: 9px 12px; }
+  [data-skin="b"][data-variant] .b-scene .b-logo.is-mark { width: 104px; }
+}
+
+/* Вступительная карточка сферы (вариант для сравнения, 17.09). Текста у Антона больше, чем на вопросе,
+   поэтому подложка выше, а распорка короче: сцена остаётся видна сверху, текст читается целиком */
+[data-skin="b"] .mini.is-intro .mini-body::before { flex-basis: 24%; }
+[data-skin="b"] .mini.is-intro::after { height: 80%; }
+[data-skin="b"] .m-intro-title { font-size: 38px; margin-top: 2px; color: #FFF8EC; }
+[data-skin="b"] .m-thought { font-size: 22px; line-height: 1.28; color: #F5C167; }
+[data-skin="b"] .m-sphere-intro { font-size: 15.5px; line-height: 1.5; color: #EDE3D2; }
+@media (max-height: 780px) {
+  [data-skin="b"] .mini.is-intro .mini-body::before { flex-basis: 14%; }
+  [data-skin="b"] .mini.is-intro::after { height: 88%; }
+  [data-skin="b"] .m-intro-title { font-size: 32px; }
+  [data-skin="b"] .m-thought { font-size: 19px; }
+  [data-skin="b"] .m-sphere-intro { font-size: 14.5px; line-height: 1.45; }
+}
+
 </style>
 </head>
 <body>
@@ -191,9 +392,11 @@
 </section>
 <div class="toast" id="toast" hidden></div>
 <script src="content-questions.js?v=202609161956"></script>
+<script src="content-questions-anton.js?v=202609161956"></script>
 <script src="content-results.js?v=202609161956"></script>
 <script src="logic.js?v=202609161956"></script>
 <script src="miniapp.js?v=202609161956"></script>
+<script src="skin.js?v=202609161956"></script>
 <script src="tg-app.js?v=202609161956"></script>
 </body>
 </html>
