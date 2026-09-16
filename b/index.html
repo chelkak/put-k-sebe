@@ -354,8 +354,9 @@ html:root[data-skin="b"] {
    вопрос вылезал выше подложки прямо на логотип. Подложка выше, шрифт чуть плотнее, водяной знак меньше.
    Бот (/b/) эти правила не задевают. */
 [data-skin="b"][data-variant] .mini:has(.m-q)::after { height: 74%; }
-[data-skin="b"][data-variant] .mini-body:has(.m-q)::before { flex-basis: 22%; }
-/* Подложка и подъём текста только на экранах вопросов: раньше правило задевало и стартовый экран,
+/* Текст вопроса стоит так же низко, как в первом боте: распорка сама сжимается, если ответы длинные,
+   и поднимает вопрос ровно настолько, чтобы всё влезло без прокрутки (Александр, 17.09).
+   Подложка только на экранах вопросов: раньше правило задевало и стартовый экран,
    текст уезжал вверх и «Диагностика» наезжала на подпись логотипа (замечание Антона, 17.09) */
 [data-skin="b"][data-variant] .m-q { font-size: 25px; line-height: 1.15; }
 [data-skin="b"][data-variant] .m-opts { gap: 7px; }
@@ -363,7 +364,6 @@ html:root[data-skin="b"] {
 [data-skin="b"][data-variant] .b-scene .b-logo.is-mark { width: 128px; opacity: 0.32; }
 @media (max-height: 780px) {
   [data-skin="b"][data-variant] .mini:has(.m-q)::after { height: 84%; }
-  [data-skin="b"][data-variant] .mini-body:has(.m-q)::before { flex-basis: 12%; }
   [data-skin="b"][data-variant] .m-q { font-size: 22px; }
   [data-skin="b"][data-variant] .m-opt { font-size: 14.5px; padding: 9px 12px; }
   [data-skin="b"][data-variant] .b-scene .b-logo.is-mark { width: 104px; }
@@ -400,12 +400,12 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609162233"></script>
-<script src="content-sfery-anton.js?v=202609162233"></script>
-<script src="content-results.js?v=202609162233"></script>
-<script src="logic.js?v=202609162233"></script>
-<script src="miniapp.js?v=202609162233"></script>
-<script src="skin.js?v=202609162233"></script>
-<script src="tg-app.js?v=202609162233"></script>
+<script src="content-questions.js?v=202609162243"></script>
+<script src="content-sfery-anton.js?v=202609162243"></script>
+<script src="content-results.js?v=202609162243"></script>
+<script src="logic.js?v=202609162243"></script>
+<script src="miniapp.js?v=202609162243"></script>
+<script src="skin.js?v=202609162243"></script>
+<script src="tg-app.js?v=202609162243"></script>
 </body>
 </html>
