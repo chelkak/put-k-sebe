@@ -239,13 +239,27 @@ html:root[data-skin="b"] {
   opacity: 0.42;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
 }
+
+/* Низкие экраны: логотип уменьшается, текст уплотняется, чтобы ничего не наслаивалось */
+@media (max-height: 780px) {
+  [data-skin="b"] .b-scene .b-logo { width: 168px; top: 1%; }
+  [data-skin="b"] .m-lead { font-size: 19px; }
+  [data-skin="b"] .m-p, [data-skin="b"] .m-note { font-size: 14px; line-height: 1.4; }
+  [data-skin="b"] .mini-body { padding: 14px 16px 18px; gap: 12px; }
+}
+@media (max-height: 680px) {
+  [data-skin="b"] .b-scene .b-logo { width: 132px; }
+  [data-skin="b"] .m-q { font-size: 25px; }
+  [data-skin="b"] .m-opt { font-size: 15px; padding: 11px 12px; }
+  [data-skin="b"] .m-spheres li { font-size: 12px; padding: 3px 9px; }
+}
 [data-skin="b"] .m-eyebrow { color: var(--accent); letter-spacing: 0.2em; }
 [data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
 [data-skin="b"] .m-lead { font-family: var(--display); font-size: 21px; line-height: 1.3; }
 [data-skin="b"] .m-muted, [data-skin="b"] .m-bar-t { color: var(--muted); }
 /* Сферы остаются на старте (человек должен понимать, о чём речь), но компактно, строкой,
    чтобы экран помещался целиком и свайпать не приходилось */
-[data-skin="b"] .m-spheres { display: flex; flex-wrap: wrap; gap: 6px; border: 0; margin: 4px 0 0; padding: 0; }
+[data-skin="b"] .m-spheres { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; border: 0; margin: 4px 0 0; padding: 0; }
 [data-skin="b"] .m-spheres li {
   display: inline-flex; border: 1px solid rgba(224, 163, 63, 0.38); border-radius: 99px;
   padding: 4px 11px; font-size: 13px; color: #F1E6D3; background: rgba(224, 163, 63, 0.1);
@@ -277,11 +291,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160118"></script>
-<script src="content-results.js?v=202609160118"></script>
-<script src="logic.js?v=202609160118"></script>
-<script src="miniapp.js?v=202609160118"></script>
-<script src="skin.js?v=202609160118"></script>
-<script src="tg-app.js?v=202609160118"></script>
+<script src="content-questions.js?v=202609160129"></script>
+<script src="content-results.js?v=202609160129"></script>
+<script src="logic.js?v=202609160129"></script>
+<script src="miniapp.js?v=202609160129"></script>
+<script src="skin.js?v=202609160129"></script>
+<script src="tg-app.js?v=202609160129"></script>
 </body>
 </html>
