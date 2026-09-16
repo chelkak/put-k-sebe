@@ -65,6 +65,9 @@ window.SKIN = (function () {
     const s = ensureScene();
     if (s.parentNode !== box) box.prepend(s);
     box.classList.toggle("b-result", !!isResult);
+    // Слой радуги включаем заранее, к 8-му вопросу: сама радуга ещё прозрачна,
+    // зато появление проходит плавно, а до этого телефон не тратит силы на пустой слой
+    box.classList.toggle("has-rain", step >= 8);
     const L = light(step), set = (k, v) => box.style.setProperty(k, v);
     set("--night", L.night.toFixed(3));
     set("--dawn", L.dawn.toFixed(3));

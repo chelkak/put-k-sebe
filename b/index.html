@@ -163,6 +163,16 @@
   .mini { height: var(--app-h, var(--tg-viewport-stable-height, 100vh)); min-height: 0; border: 0; border-radius: 0; }
   .mini-head { display: none; }
   .mini-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  /* Телефон гасит системную подсветку тапа и выделение текста: из-за них после ответа
+     оставалась серая вспышка, а долгое нажатие поднимало меню «Копировать» и синее выделение. */
+  .mini, .mini * { -webkit-tap-highlight-color: transparent; }
+  .mini button, .m-q, .m-qmeta, .m-ticks, .m-eyebrow, .m-h1 {
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+  }
+  .mini button { touch-action: manipulation; }   /* без задержки 300 мс и без зума по двойному тапу */
+  /* Прокрутка внутри не должна тянуть окно Telegram: иначе мини-апп уезжает вниз и закрывается жестом */
+  html, body { overscroll-behavior: none; }
+  .mini-body { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 /*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
 /* Вариант Б: три кадра одной сцены от Жоры (ночь, рассвет, день) плавно перетекают друг в друга.
    Камера медленно отъезжает, свет доходит до полного солнца только на 15-м ответе. */
@@ -218,12 +228,17 @@ html:root[data-skin="b"] {
   pointer-events: none; transition: opacity 1400ms ease;
 }
 [data-skin="b"] .b-rainbow img { width: 100%; height: auto; display: block; }
+/* Пока радуги нет, слой вообще выключен: прозрачный слой с режимом screen всё равно
+   заставлял телефон смешивать картинку во весь экран на каждом кадре */
+[data-skin="b"] .b-rainbow { display: none; }
+[data-skin="b"] .mini.has-rain .b-rainbow { display: block; }
 
 /* лёгкая дымка в долине, чтобы кадр дышал */
 [data-skin="b"] .b-haze {
   position: absolute; left: -12%; right: -12%; top: 40%; height: 20%;
   background: linear-gradient(to bottom, rgba(214, 205, 189, 0) 0%, rgba(214, 205, 189, 0.45) 50%, rgba(214, 205, 189, 0) 100%);
-  filter: blur(10px); opacity: var(--haze); transition: opacity 1200ms ease;
+  /* blur убран: градиент и так мягкий, а размытие заставляло телефон перерисовывать слой каждый кадр */
+  opacity: var(--haze); transition: opacity 1200ms ease;
   animation: bDrift 58s ease-in-out infinite alternate;
 }
 @keyframes bDrift { from { transform: translateX(-4%); } to { transform: translateX(4%); } }
@@ -331,11 +346,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160254"></script>
-<script src="content-results.js?v=202609160254"></script>
-<script src="logic.js?v=202609160254"></script>
-<script src="miniapp.js?v=202609160254"></script>
-<script src="skin.js?v=202609160254"></script>
-<script src="tg-app.js?v=202609160254"></script>
+<script src="content-questions.js?v=202609160300"></script>
+<script src="content-results.js?v=202609160300"></script>
+<script src="logic.js?v=202609160300"></script>
+<script src="miniapp.js?v=202609160300"></script>
+<script src="skin.js?v=202609160300"></script>
+<script src="tg-app.js?v=202609160300"></script>
 </body>
 </html>

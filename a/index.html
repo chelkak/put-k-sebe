@@ -163,6 +163,16 @@
   .mini { height: var(--app-h, var(--tg-viewport-stable-height, 100vh)); min-height: 0; border: 0; border-radius: 0; }
   .mini-head { display: none; }
   .mini-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  /* Телефон гасит системную подсветку тапа и выделение текста: из-за них после ответа
+     оставалась серая вспышка, а долгое нажатие поднимало меню «Копировать» и синее выделение. */
+  .mini, .mini * { -webkit-tap-highlight-color: transparent; }
+  .mini button, .m-q, .m-qmeta, .m-ticks, .m-eyebrow, .m-h1 {
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+  }
+  .mini button { touch-action: manipulation; }   /* без задержки 300 мс и без зума по двойному тапу */
+  /* Прокрутка внутри не должна тянуть окно Telegram: иначе мини-апп уезжает вниз и закрывается жестом */
+  html, body { overscroll-behavior: none; }
+  .mini-body { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 /*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500;600&family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
 /* Вариант А «как видит Антон»: золото и свет на чёрном, как на его фото и в логотипе. Всегда тёмный. */
 html:root[data-skin="a"] {
@@ -226,11 +236,11 @@ html:root[data-skin="a"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160254"></script>
-<script src="content-results.js?v=202609160254"></script>
-<script src="logic.js?v=202609160254"></script>
-<script src="miniapp.js?v=202609160254"></script>
-<script src="skin.js?v=202609160254"></script>
-<script src="tg-app.js?v=202609160254"></script>
+<script src="content-questions.js?v=202609160300"></script>
+<script src="content-results.js?v=202609160300"></script>
+<script src="logic.js?v=202609160300"></script>
+<script src="miniapp.js?v=202609160300"></script>
+<script src="skin.js?v=202609160300"></script>
+<script src="tg-app.js?v=202609160300"></script>
 </body>
 </html>

@@ -34,6 +34,9 @@
   if (tg) {
     tg.ready(); tg.expand();
     tg.onEvent("viewportChanged", syncHeight);
+    // Свайп вниз внутри мини-аппа закрывал его прямо посреди теста: прокрутка результата
+    // цеплялась за жест Telegram. Отключаем там, где Telegram это умеет (с версии 7.7).
+    try { if (tg.isVersionAtLeast && tg.isVersionAtLeast("7.7") && tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
   }
   syncHeight();
 
@@ -41,7 +44,12 @@
   // Иначе вебвью продолжает рисовать в фоне и при возврате подвисает.
   function syncVisible() {
     document.documentElement.classList.toggle("is-hidden", document.hidden);
-    if (!document.hidden) syncHeight();
+    if (document.hidden) return;
+    syncHeight();
+    // После разблокировки телефона Telegram иногда возвращает окно свёрнутым и с прежней высотой:
+    // разворачиваем заново и пересчитываем высоту следующим кадром, когда размер уже настоящий.
+    try { tg && tg.expand(); } catch (e) {}
+    requestAnimationFrame(syncHeight);
   }
   document.addEventListener("visibilitychange", syncVisible);
   window.addEventListener("pageshow", syncVisible);
