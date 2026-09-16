@@ -185,7 +185,7 @@ html:root[data-skin="b"] {
   position: absolute; inset: -3%;
   background-size: cover; background-position: center var(--pos-y, 58%);
   transform: scale(var(--cam));
-  transform-origin: 38% 64%;
+  transform-origin: 38% 100%;   /* растём от нижнего края: пара поднимается над карточкой, текст не двигаем */
   transition: opacity 1100ms ease, transform 1400ms cubic-bezier(0.25, 0.8, 0.3, 1), background-position 1400ms ease;
   will-change: opacity, transform;
 }
@@ -248,11 +248,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160018"></script>
-<script src="content-results.js?v=202609160018"></script>
-<script src="logic.js?v=202609160018"></script>
-<script src="miniapp.js?v=202609160018"></script>
-<script src="skin.js?v=202609160018"></script>
-<script src="tg-app.js?v=202609160018"></script>
+<script src="content-questions.js?v=202609160025"></script>
+<script src="content-results.js?v=202609160025"></script>
+<script src="logic.js?v=202609160025"></script>
+<script src="miniapp.js?v=202609160025"></script>
+<script src="skin.js?v=202609160025"></script>
+<script src="tg-app.js?v=202609160025"></script>
 </body>
 </html>
