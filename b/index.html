@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Что странице разрешено грузить. GitHub Pages свои заголовки не отдаёт, поэтому правило прямо здесь:
+     скрипты только наши и телеграмовский, стили только наши и Google Fonts, картинки только наши.
+     Если когда-нибудь на страницу попадёт чужой код, увести ответы ему будет некуда. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://telegram.org; worker-src blob:; base-uri 'none'; form-action 'none'">
 <title>Путь к себе</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -160,9 +164,12 @@
   html, body { margin: 0; padding: 0; background: var(--surface); }
   body { color: var(--ink); font: 15px/1.5 var(--body); }
   /* Высоту задаёт tg-app.js на каждое изменение окна: при сворачивании Telegram меняет размер вебвью */
-  .mini { height: var(--app-h, var(--tg-viewport-stable-height, 100vh)); min-height: 0; border: 0; border-radius: 0; }
+  /* Отступ сверху отдаёт сам Telegram (safeAreaInset): на айфонах с островком и в полноэкранном
+     режиме под его панелью иначе прячется верх экрана */
+  .mini { height: var(--app-h, var(--tg-viewport-stable-height, 100vh)); min-height: 0; border: 0; border-radius: 0;
+          box-sizing: border-box; padding-top: var(--safe-top, 0px); }
   .mini-head { display: none; }
-  .mini-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .mini-foot { padding-bottom: calc(14px + max(env(safe-area-inset-bottom), var(--safe-bottom, 0px))); }
   /* Телефон гасит системную подсветку тапа и выделение текста: из-за них после ответа
      оставалась серая вспышка, а долгое нажатие поднимало меню «Копировать» и синее выделение. */
   .mini, .mini * { -webkit-tap-highlight-color: transparent; }
@@ -173,6 +180,8 @@
   /* Прокрутка внутри не должна тянуть окно Telegram: иначе мини-апп уезжает вниз и закрывается жестом */
   html, body { overscroll-behavior: none; }
   .mini-body { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  /* Экран погас или мини-апп свёрнут: кружок ожидания тоже должен встать, он крутился в фоне */
+  html.is-hidden .m-pulse { animation: none !important; }
 /*FONTS: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap*/
 /* Вариант Б: три кадра одной сцены от Жоры (ночь, рассвет, день) плавно перетекают друг в друга.
    Камера медленно отъезжает, свет доходит до полного солнца только на 15-м ответе. */
@@ -214,7 +223,9 @@ html:root[data-skin="b"] {
   transition: opacity 900ms ease, transform 1200ms ease;
 }
 /* Короткая вспышка в момент ответа: свет «пробивается», шаг виден */
-[data-skin="b"] .b-scene.is-pulse .b-layer { animation: bFlash 760ms ease; }
+/* Осветление идёт одним проходом по всей сцене, а не по каждой фотографии отдельно:
+   раньше телефон на каждый ответ обрабатывал три полноэкранных кадра сразу */
+[data-skin="b"] .b-scene.is-pulse { animation: bFlash 760ms ease; }
 @keyframes bFlash { 0% { filter: brightness(1); } 32% { filter: brightness(1.22) saturate(1.12); } 100% { filter: brightness(1); } }
 @media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-scene.is-pulse .b-layer { animation: none; } }
 
@@ -244,8 +255,10 @@ html:root[data-skin="b"] {
 @keyframes bDrift { from { transform: translateX(-4%); } to { transform: translateX(4%); } }
 @media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-haze { animation: none; } }
 /* Экран заблокирован или мини-апп свёрнут: гасим анимации, чтобы вебвью не грузился впустую */
-[data-skin="b"].is-hidden .b-haze, [data-skin="b"].is-hidden .b-pulse { animation: none !important; }
-[data-skin="b"].is-hidden .b-layer { transition: none !important; }
+/* Гасим всю сцену целиком, а не отдельные слои: раньше правило было написано с ошибкой
+   и заодно продолжали работать переходы свечения, радуги и логотипа */
+[data-skin="b"].is-hidden .b-scene,
+[data-skin="b"].is-hidden .b-scene * { animation: none !important; transition: none !important; }
 
 /* карточка снизу: сцена остаётся видимой сверху, пара идёт над ней */
 /* Вопрос начинается у верхней кромки карточки, а не жмётся к низу экрана */
@@ -346,11 +359,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160300"></script>
-<script src="content-results.js?v=202609160300"></script>
-<script src="logic.js?v=202609160300"></script>
-<script src="miniapp.js?v=202609160300"></script>
-<script src="skin.js?v=202609160300"></script>
-<script src="tg-app.js?v=202609160300"></script>
+<script src="content-questions.js?v=202609160338"></script>
+<script src="content-results.js?v=202609160338"></script>
+<script src="logic.js?v=202609160338"></script>
+<script src="miniapp.js?v=202609160338"></script>
+<script src="skin.js?v=202609160338"></script>
+<script src="tg-app.js?v=202609160338"></script>
 </body>
 </html>

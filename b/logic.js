@@ -18,7 +18,9 @@ window.LOGIC = (function () {
   function validate(answers, content) {                                         // 5.4
     for (const q of content.QUESTIONS) {
       if (!answers[q.id]) return { ok: false, missing: q.id };
-      if (!(answers[q.id] in POINTS)) return { ok: false, invalid: q.id };
+      // hasOwnProperty, а не in: через in проходили служебные имена вроде toString,
+      // и расчёт падал на подложенном вручную ответе
+      if (!Object.prototype.hasOwnProperty.call(POINTS, answers[q.id])) return { ok: false, invalid: q.id };
     }
     return { ok: true };
   }

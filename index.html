@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Что странице разрешено грузить. GitHub Pages свои заголовки не отдаёт, поэтому правило прямо здесь:
+     скрипты только наши и телеграмовский, стили только наши и Google Fonts, картинки только наши.
+     Если когда-нибудь на страницу попадёт чужой код, увести ответы ему будет некуда. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://telegram.org; worker-src blob:; base-uri 'none'; form-action 'none'">
 <title>Путь к себе</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -159,9 +163,12 @@
   html, body { margin: 0; padding: 0; background: var(--surface); }
   body { color: var(--ink); font: 15px/1.5 var(--body); }
   /* Высоту задаёт tg-app.js на каждое изменение окна: при сворачивании Telegram меняет размер вебвью */
-  .mini { height: var(--app-h, var(--tg-viewport-stable-height, 100vh)); min-height: 0; border: 0; border-radius: 0; }
+  /* Отступ сверху отдаёт сам Telegram (safeAreaInset): на айфонах с островком и в полноэкранном
+     режиме под его панелью иначе прячется верх экрана */
+  .mini { height: var(--app-h, var(--tg-viewport-stable-height, 100vh)); min-height: 0; border: 0; border-radius: 0;
+          box-sizing: border-box; padding-top: var(--safe-top, 0px); }
   .mini-head { display: none; }
-  .mini-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .mini-foot { padding-bottom: calc(14px + max(env(safe-area-inset-bottom), var(--safe-bottom, 0px))); }
   /* Телефон гасит системную подсветку тапа и выделение текста: из-за них после ответа
      оставалась серая вспышка, а долгое нажатие поднимало меню «Копировать» и синее выделение. */
   .mini, .mini * { -webkit-tap-highlight-color: transparent; }
@@ -172,6 +179,8 @@
   /* Прокрутка внутри не должна тянуть окно Telegram: иначе мини-апп уезжает вниз и закрывается жестом */
   html, body { overscroll-behavior: none; }
   .mini-body { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  /* Экран погас или мини-апп свёрнут: кружок ожидания тоже должен встать, он крутился в фоне */
+  html.is-hidden .m-pulse { animation: none !important; }
 </style>
 </head>
 <body>
@@ -181,10 +190,10 @@
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160300"></script>
-<script src="content-results.js?v=202609160300"></script>
-<script src="logic.js?v=202609160300"></script>
-<script src="miniapp.js?v=202609160300"></script>
-<script src="tg-app.js?v=202609160300"></script>
+<script src="content-questions.js?v=202609160338"></script>
+<script src="content-results.js?v=202609160338"></script>
+<script src="logic.js?v=202609160338"></script>
+<script src="miniapp.js?v=202609160338"></script>
+<script src="tg-app.js?v=202609160338"></script>
 </body>
 </html>

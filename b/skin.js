@@ -38,6 +38,18 @@ window.SKIN = (function () {
     return out;
   }
 
+  // Каждая фотография после распаковки занимает в памяти телефона около 5 МБ, вес файла тут ни при чём.
+  // Поэтому держим подставленными только те кадры, которые сейчас нужны, остальные снимаем.
+  const SRC = { ".b-night": "assets/scene-noch.jpg", ".b-dawn": "assets/scene-rassvet.jpg", ".b-day": "assets/scene-den.jpg" };
+  const ready = {};     // кадр уже скачан, подставлять можно
+  const shown = {};     // кадр сейчас подставлен в слой
+  function paint(sel, on) {
+    const n = scene && scene.querySelector(sel);
+    if (!n) return;
+    if (on && ready[sel] && !shown[sel]) { n.style.backgroundImage = `url("${SRC[sel]}")`; shown[sel] = true; }
+    if (!on && shown[sel]) { n.style.backgroundImage = "none"; shown[sel] = false; }
+  }
+
   let scene = null;
   function ensureScene() {
     if (scene && document.body.contains(scene)) return scene;
@@ -50,12 +62,12 @@ window.SKIN = (function () {
       // Настоящая радуга: вытащена из фотографии Антона, лежит добавочным светом
       '<div class="b-rainbow"><img src="assets/rainbow.png" alt="" decoding="async"></div>' +
       '<div class="b-haze"></div>';
+    ready[".b-night"] = true; shown[".b-night"] = true;      // ночь подставлена стилями сразу
     // Рассвет и день подгружаем после старта, чтобы первый экран открывался быстро
-    const later = [[".b-dawn", "assets/scene-rassvet.jpg"], [".b-day", "assets/scene-den.jpg"]];
-    setTimeout(() => later.forEach(([sel, src]) => {
+    setTimeout(() => [".b-dawn", ".b-day"].forEach((sel) => {
       const img = new Image();
-      img.onload = () => { const n = scene.querySelector(sel); if (n) n.style.backgroundImage = `url("${src}")`; };
-      img.src = src;
+      img.onload = () => { ready[sel] = true; paint(sel, true); };
+      img.src = SRC[sel];
     }), 1200);
     return scene;
   }
@@ -78,6 +90,10 @@ window.SKIN = (function () {
     set("--glow", L.glow.toFixed(3));
     set("--rain", L.rain.toFixed(3));        // радуга появляется к 13-му вопросу
     set("--k", (step / 15).toFixed(3));
+    // Ночь не нужна уже с 8-го ответа, рассвет с 11-го: снимаем их и освобождаем память телефона.
+    // Снимаем с запасом в один шаг, чтобы это не попало в момент перехода.
+    paint(".b-night", step < 9);
+    paint(".b-dawn", step < 12);
     // Вспышка света в момент ответа: шаг становится заметным
     if (step > 0) {
       s.classList.remove("is-pulse");

@@ -4,17 +4,52 @@
   const tg = window.Telegram && window.Telegram.WebApp;
   const C = window.CONTENT, L = window.LOGIC;
   const SKIN = document.documentElement.dataset.skin || "base";          // base, a или b: у каждого своя память
-  const KEY = SKIN === "base" ? "pks_tg_v1" : "pks_tg_v1_" + SKIN;
+  const BASE_KEY = SKIN === "base" ? "pks_tg_v1" : "pks_tg_v1_" + SKIN;
+  // К ключу добавляем номер аккаунта Telegram: на одном телефоне аккаунтов может быть несколько,
+  // а хранилище у вебвью общее, и второй увидел бы диагностику первого.
+  const UID = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || 0;
+  const KEY = UID ? BASE_KEY + "_u" + UID : BASE_KEY;
   const fresh = () => ({ user: { first_name: "" }, settings: { program_url: "https://example.getcourse.ru/put-k-sebe", mode: "mini" }, sessions: [], events: [] });
 
   // Ссылки владельца (system_settings в ТЗ). Берутся отсюда при каждом запуске, чтобы замена доходила до всех.
   const PROGRAM_URL = "https://putksebe-system.ru/sam_zero";
   const CONTACT_URL = "https://t.me/anton_kostin_opora";
 
-  let S;
-  try { S = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch (e) { S = fresh(); }
+  // Данные могли остаться от прежней версии или испортиться: чего нет, подставляем по умолчанию.
+  // Раньше на таком запуске приложение падало и человек видел пустой экран.
+  function load() {
+    let raw = null;
+    try { raw = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+    if (!raw && UID) {                                   // первый запуск с именным ключом: переносим прежние ответы
+      try { raw = JSON.parse(localStorage.getItem(BASE_KEY)); localStorage.removeItem(BASE_KEY); } catch (e) {}
+    }
+    const s = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : fresh();
+    const f = fresh();
+    if (!s.user || typeof s.user !== "object") s.user = f.user;
+    if (!s.settings || typeof s.settings !== "object") s.settings = f.settings;
+    if (!Array.isArray(s.sessions)) s.sessions = [];
+    if (!Array.isArray(s.events)) s.events = [];
+    return s;
+  }
+  const S = load();
   S.settings.program_url = PROGRAM_URL;
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+  let storageWarned = false;
+  function save() {
+    // Старые прохождения не копим без конца: иначе хранилище упрётся в лимит
+    // и телефон молча перестанет сохранять новые ответы
+    if (S.sessions.length > 8) S.sessions = S.sessions.slice(-8);
+    try { localStorage.setItem(KEY, JSON.stringify(S)); return true; }
+    catch (e) {
+      // Память телефона переполнена или запрещена. Раньше мы молчали, а под вопросом обещали
+      // «ответ сохраняется сразу»: человек мог потерять всё и не узнать об этом.
+      if (!storageWarned) {
+        storageWarned = true;
+        setTimeout(() => toast("Телефон не даёт сохранить ответы. Лучше пройти до конца, не закрывая приложение."), 400);
+      }
+      return false;
+    }
+  }
 
   function applyTheme() {
     document.documentElement.dataset.theme = tg && tg.colorScheme === "dark" ? "dark" : "light";
@@ -31,20 +66,34 @@
   window.addEventListener("resize", syncHeight);
   window.addEventListener("orientationchange", syncHeight);
 
+  // Безопасные отступы отдаёт сам Telegram. На айфонах с островком и в полноэкранном режиме
+  // верх экрана иначе уходит под его панель, а нижняя кнопка под системную полосу.
+  function syncSafeArea() {
+    const a = (tg && tg.safeAreaInset) || {}, b = (tg && tg.contentSafeAreaInset) || {};
+    const st = document.documentElement.style;
+    st.setProperty("--safe-top", Math.max(a.top || 0, b.top || 0) + "px");
+    st.setProperty("--safe-bottom", Math.max(a.bottom || 0, b.bottom || 0) + "px");
+  }
+
   if (tg) {
     tg.ready(); tg.expand();
     tg.onEvent("viewportChanged", syncHeight);
     // Свайп вниз внутри мини-аппа закрывал его прямо посреди теста: прокрутка результата
     // цеплялась за жест Telegram. Отключаем там, где Telegram это умеет (с версии 7.7).
     try { if (tg.isVersionAtLeast && tg.isVersionAtLeast("7.7") && tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
+    try { tg.onEvent("safeAreaChanged", syncSafeArea); tg.onEvent("contentSafeAreaChanged", syncSafeArea); } catch (e) {}
   }
   syncHeight();
+  syncSafeArea();
 
   // Телефон заблокирован или мини-апп свёрнут: помечаем это, чтобы сцена ничего не анимировала.
   // Иначе вебвью продолжает рисовать в фоне и при возврате подвисает.
   function syncVisible() {
-    document.documentElement.classList.toggle("is-hidden", document.hidden);
-    if (document.hidden) return;
+    // document.hidden ловит блокировку экрана, isActive это состояние мини-аппа внутри Telegram:
+    // свёрнутый в шторку он формально видим, а рисовать там уже незачем
+    const away = document.hidden || (tg && tg.isActive === false);
+    document.documentElement.classList.toggle("is-hidden", !!away);
+    if (away) return;
     syncHeight();
     // После разблокировки телефона Telegram иногда возвращает окно свёрнутым и с прежней высотой:
     // разворачиваем заново и пересчитываем высоту следующим кадром, когда размер уже настоящий.
@@ -53,6 +102,8 @@
   }
   document.addEventListener("visibilitychange", syncVisible);
   window.addEventListener("pageshow", syncVisible);
+  // Telegram сам сообщает, что мини-апп ушёл на второй план: это надёжнее одного document.hidden
+  if (tg && tg.onEvent) { try { tg.onEvent("activated", syncVisible); tg.onEvent("deactivated", syncVisible); } catch (e) {} }
   syncVisible();
   if (tg) {
     const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
@@ -61,7 +112,9 @@
   }
   applyTheme();
 
-  const active = () => S.sessions.find((s) => s.status === "in_progress");
+  // «calculating» это та же незаконченная диагностика: телефон мог выгрузить приложение
+  // в ту секунду, пока считался результат. Без этого все 15 ответов пропадали.
+  const active = () => S.sessions.find((s) => s.status === "in_progress" || s.status === "calculating");
   const lastDone = () => [...S.sessions].reverse().find((s) => s.status === "completed");
   const sphere = (code) => C.SPHERES.find((x) => x.code === code);
   const STATUS_TITLE = (st) => C.TEXT[`STATUS_${st}_TITLE`];
