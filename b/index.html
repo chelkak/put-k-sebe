@@ -294,6 +294,11 @@ html:root[data-skin="b"] {
 [data-skin="b"] .m-ticks i.done { background: var(--accent); }
 [data-skin="b"] .m-ticks i.now { background: var(--accent); opacity: 0.45; }
 /* Крупнее и контрастнее: на фотографии мелкий белый текст читался плохо */
+/* Полупрозрачная тёмная плашка за подписью сферы: буквы читаются на любом кадре */
+[data-skin="b"] .m-sphere {
+  background: rgba(12, 10, 8, 0.3);
+  border-radius: 8px; padding: 2px 8px;
+}
 /* Подпись сферы должна цеплять взгляд: жирнее, ярче и с мягким тёмным ореолом поверх фотографии */
 [data-skin="b"] .m-sphere b {
   color: #F5C167; font-size: 15px; font-weight: 700; letter-spacing: 0.07em;
@@ -322,11 +327,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160238"></script>
-<script src="content-results.js?v=202609160238"></script>
-<script src="logic.js?v=202609160238"></script>
-<script src="miniapp.js?v=202609160238"></script>
-<script src="skin.js?v=202609160238"></script>
-<script src="tg-app.js?v=202609160238"></script>
+<script src="content-questions.js?v=202609160247"></script>
+<script src="content-results.js?v=202609160247"></script>
+<script src="logic.js?v=202609160247"></script>
+<script src="miniapp.js?v=202609160247"></script>
+<script src="skin.js?v=202609160247"></script>
+<script src="tg-app.js?v=202609160247"></script>
 </body>
 </html>
