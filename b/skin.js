@@ -8,8 +8,8 @@ window.SKIN = (function () {
     { s: 0,  night: 1.00, dawn: 0.00, day: 0.00, haze: 0.16 },
     { s: 4,  night: 0.92, dawn: 0.08, day: 0.00, haze: 0.22 },
     { s: 8,  night: 0.45, dawn: 0.55, day: 0.00, haze: 0.34 },
-    { s: 11, night: 0.10, dawn: 0.90, day: 0.00, haze: 0.38 },
-    { s: 13, night: 0.00, dawn: 1.00, day: 0.18, haze: 0.30 },
+    { s: 11, night: 0.08, dawn: 0.92, day: 0.12, haze: 0.38 },
+    { s: 13, night: 0.00, dawn: 1.00, day: 0.45, haze: 0.30 },
     { s: 15, night: 0.00, dawn: 0.35, day: 1.00, haze: 0.18 }
   ];
   const mix = (a, b, t) => a + (b - a) * t;
@@ -62,7 +62,7 @@ window.SKIN = (function () {
     set("--cam", L.cam.toFixed(3));
     set("--pos-y", L.posY.toFixed(1) + "%");
     // чем светлее сцена, тем плотнее карточка: текст должен читаться и на рассвете
-    set("--card", `rgba(14, 12, 10, ${(0.66 + 0.2 * (step / 15)).toFixed(2)})`);
+    set("--card", `rgba(14, 12, 10, ${(0.8 + 0.12 * (step / 15)).toFixed(2)})`);
   }
 
   function progress(done) {

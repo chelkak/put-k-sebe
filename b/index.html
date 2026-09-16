@@ -226,13 +226,16 @@ html:root[data-skin="b"] {
 [data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
 [data-skin="b"] .m-lead { font-family: var(--display); font-size: 21px; line-height: 1.3; }
 [data-skin="b"] .m-muted, [data-skin="b"] .m-bar-t { color: var(--muted); }
-[data-skin="b"] .m-spheres, [data-skin="b"] .m-spheres li { border-color: var(--line); }
+/* Стартовый экран должен помещаться целиком: список сфер прятали под кнопку, его не видели без свайпа */
+[data-skin="b"] .m-spheres { display: none; }
 [data-skin="b"] .m-ticks i { height: 3px; background: rgba(244, 237, 224, 0.18); }
 [data-skin="b"] .m-ticks i.done { background: var(--accent); }
 [data-skin="b"] .m-ticks i.now { background: var(--accent); opacity: 0.45; }
-[data-skin="b"] .m-sphere b { color: var(--accent); }
-[data-skin="b"] .m-q { font-family: var(--display); font-size: 27px; font-weight: 600; line-height: 1.15; }
-[data-skin="b"] .m-opt { background: rgba(244, 237, 224, 0.07); border: 1px solid rgba(244, 237, 224, 0.15); border-radius: 13px; }
+/* Крупнее и контрастнее: на фотографии мелкий белый текст читался плохо */
+[data-skin="b"] .m-sphere b { color: var(--accent); font-size: 15px; letter-spacing: 0.06em; }
+[data-skin="b"] .m-count { font-size: 14px; color: #D9CDBA; }
+[data-skin="b"] .m-q { font-family: var(--display); font-size: 30px; font-weight: 600; line-height: 1.12; color: #FFF8EC; }
+[data-skin="b"] .m-opt { font-size: 17px; color: #FBF4E6; background: rgba(28, 23, 18, 0.55); border: 1px solid rgba(244, 237, 224, 0.28); border-radius: 13px; }
 [data-skin="b"] .m-opt:hover { border-color: var(--accent); }
 [data-skin="b"] .m-opt.picked { background: var(--accent-soft); border-color: var(--accent); }
 [data-skin="b"] .m-big b { font-family: var(--display); font-size: 62px; color: var(--accent); }
@@ -251,11 +254,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160030"></script>
-<script src="content-results.js?v=202609160030"></script>
-<script src="logic.js?v=202609160030"></script>
-<script src="miniapp.js?v=202609160030"></script>
-<script src="skin.js?v=202609160030"></script>
-<script src="tg-app.js?v=202609160030"></script>
+<script src="content-questions.js?v=202609160049"></script>
+<script src="content-results.js?v=202609160049"></script>
+<script src="logic.js?v=202609160049"></script>
+<script src="miniapp.js?v=202609160049"></script>
+<script src="skin.js?v=202609160049"></script>
+<script src="tg-app.js?v=202609160049"></script>
 </body>
 </html>
