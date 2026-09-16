@@ -206,7 +206,9 @@ html:root[data-skin="b"] {
 /* карточка снизу: сцена остаётся видимой сверху, пара идёт над ней */
 /* Вопрос начинается у верхней кромки карточки, а не жмётся к низу экрана */
 [data-skin="b"] .mini-body { position: relative; z-index: 2; justify-content: flex-start; padding: 18px 18px 22px; }
-[data-skin="b"] .mini-body::before { content: ""; flex: 0 0 42%; }
+/* Распорка поднимает вопрос к верхней кромке карточки, но сжимается, если текста много:
+   иначе на вытянутых экранах вопрос уезжал вниз и приходилось скроллить */
+[data-skin="b"] .mini-body::before { content: ""; flex: 0 1 42%; min-height: 0; }
 [data-skin="b"] .mini.b-result .mini-body::before { display: none; }
 /* Без размытия: фотография должна оставаться чёткой, подложка просто плотная */
 [data-skin="b"] .mini::after {
@@ -243,8 +245,14 @@ html:root[data-skin="b"] {
 [data-skin="b"] .m-h1 { font-family: var(--display); font-weight: 600; font-size: 34px; line-height: 1.05; }
 [data-skin="b"] .m-lead { font-family: var(--display); font-size: 21px; line-height: 1.3; }
 [data-skin="b"] .m-muted, [data-skin="b"] .m-bar-t { color: var(--muted); }
-/* Стартовый экран должен помещаться целиком: список сфер прятали под кнопку, его не видели без свайпа */
-[data-skin="b"] .m-spheres { display: none; }
+/* Сферы остаются на старте (человек должен понимать, о чём речь), но компактно, строкой,
+   чтобы экран помещался целиком и свайпать не приходилось */
+[data-skin="b"] .m-spheres { display: flex; flex-wrap: wrap; gap: 6px; border: 0; margin: 4px 0 0; padding: 0; }
+[data-skin="b"] .m-spheres li {
+  display: inline-flex; border: 1px solid rgba(224, 163, 63, 0.38); border-radius: 99px;
+  padding: 4px 11px; font-size: 13px; color: #F1E6D3; background: rgba(224, 163, 63, 0.1);
+}
+[data-skin="b"] .m-spheres li span:last-child { display: none; }
 [data-skin="b"] .m-ticks i { height: 3px; background: rgba(244, 237, 224, 0.18); }
 [data-skin="b"] .m-ticks i.done { background: var(--accent); }
 [data-skin="b"] .m-ticks i.now { background: var(--accent); opacity: 0.45; }
@@ -271,11 +279,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160107"></script>
-<script src="content-results.js?v=202609160107"></script>
-<script src="logic.js?v=202609160107"></script>
-<script src="miniapp.js?v=202609160107"></script>
-<script src="skin.js?v=202609160107"></script>
-<script src="tg-app.js?v=202609160107"></script>
+<script src="content-questions.js?v=202609160116"></script>
+<script src="content-results.js?v=202609160116"></script>
+<script src="logic.js?v=202609160116"></script>
+<script src="miniapp.js?v=202609160116"></script>
+<script src="skin.js?v=202609160116"></script>
+<script src="tg-app.js?v=202609160116"></script>
 </body>
 </html>
