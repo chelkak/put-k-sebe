@@ -204,10 +204,13 @@ html:root[data-skin="b"] {
 @media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-haze { animation: none; } }
 
 /* карточка снизу: сцена остаётся видимой сверху, пара идёт над ней */
-[data-skin="b"] .mini-body { position: relative; z-index: 2; justify-content: flex-end; padding: 18px 18px 22px; }
+/* Вопрос начинается у верхней кромки карточки, а не жмётся к низу экрана */
+[data-skin="b"] .mini-body { position: relative; z-index: 2; justify-content: flex-start; padding: 18px 18px 22px; }
+[data-skin="b"] .mini-body::before { content: ""; flex: 0 0 42%; }
+[data-skin="b"] .mini.b-result .mini-body::before { display: none; }
 /* Без размытия: фотография должна оставаться чёткой, подложка просто плотная */
 [data-skin="b"] .mini::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 1;
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 54%; z-index: 1;
   background: linear-gradient(to bottom, rgba(14, 12, 10, 0) 0%, var(--card) 16%, var(--card) 100%);
   border-top: 0; border-radius: 0;
 }
@@ -248,11 +251,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160025"></script>
-<script src="content-results.js?v=202609160025"></script>
-<script src="logic.js?v=202609160025"></script>
-<script src="miniapp.js?v=202609160025"></script>
-<script src="skin.js?v=202609160025"></script>
-<script src="tg-app.js?v=202609160025"></script>
+<script src="content-questions.js?v=202609160030"></script>
+<script src="content-results.js?v=202609160030"></script>
+<script src="logic.js?v=202609160030"></script>
+<script src="miniapp.js?v=202609160030"></script>
+<script src="skin.js?v=202609160030"></script>
+<script src="tg-app.js?v=202609160030"></script>
 </body>
 </html>
