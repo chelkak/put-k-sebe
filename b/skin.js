@@ -6,11 +6,11 @@ window.SKIN = (function () {
   // Доли кадров на ключевых шагах. Между ними значения считаются плавно.
   const KEYS = [
     { s: 0,  night: 1.00, dawn: 0.00, day: 0.00, haze: 0.16 },
-    { s: 4,  night: 0.92, dawn: 0.08, day: 0.00, haze: 0.22 },
-    { s: 8,  night: 0.45, dawn: 0.55, day: 0.00, haze: 0.34 },
-    { s: 11, night: 0.08, dawn: 0.92, day: 0.12, haze: 0.38 },
-    { s: 13, night: 0.00, dawn: 1.00, day: 0.45, haze: 0.30 },
-    { s: 15, night: 0.00, dawn: 0.35, day: 1.00, haze: 0.18 }
+    { s: 3,  night: 0.80, dawn: 0.20, day: 0.00, haze: 0.24 },
+    { s: 6,  night: 0.25, dawn: 0.75, day: 0.05, haze: 0.36 },
+    { s: 9,  night: 0.00, dawn: 1.00, day: 0.45, haze: 0.34 },
+    { s: 12, night: 0.00, dawn: 0.55, day: 1.00, haze: 0.24 },
+    { s: 15, night: 0.00, dawn: 0.15, day: 1.00, haze: 0.16 }
   ];
   const mix = (a, b, t) => a + (b - a) * t;
 

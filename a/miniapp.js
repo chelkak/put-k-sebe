@@ -109,7 +109,7 @@ window.MINI = (function () {
       o.addEventListener("click", () => {
         if (locked) { event("duplicate_callback", "miniapp"); return; }           // 9.4
         if (s.status !== "in_progress" || (nextQ(s) || {}).id !== q.id) return show(); // 9.5
-        locked = true; o.classList.add("picked");
+        locked = true; o.classList.add("picked"); o.blur();   // снимаем выделение, чтобы следующий вопрос открывался с чистыми вариантами
         s.answers[q.id] = code; s.last_activity_at = new Date().toISOString(); save(); A().tap();
         event("question_answered", q.id);
         if (C.QUESTIONS.filter((x) => x.sphere === q.sphere).every((x) => s.answers[x.id])) event("block_completed", sp.name);
@@ -176,10 +176,21 @@ window.MINI = (function () {
     b.append(why, prog);
     event("offer_viewed", "miniapp");
 
+    // Кнопка консультации открывает чат с владельцем и заранее вписывает результат человека.
+    // Отправку человек подтверждает сам: без сервера мини-апп не может написать за него.
+    const summary = () => {
+      const rows = C.SPHERES.map((sp) => {
+        const x = r.scores.find((y) => y.code === sp.code);
+        return `${sp.name}: ${x.percent}%`;
+      }).join("\n");
+      const title = (A().T(r.result_title_id, s) || "").trim();
+      return `Здравствуйте, Антон. Прошёл диагностику «Путь к себе».\n\n${title}\n\n${rows}\n\nХочу консультацию.`;
+    };
     const contact = () => {
       event("contact_clicked", "miniapp");
       const c = A().contactUrl;
-      if (c && A().openTelegram) A().openTelegram(c); else toast("Здесь откроется чат с Антоном" + (c ? ": " + c : ""));
+      if (c && A().openTelegram) A().openTelegram(c + "?text=" + encodeURIComponent(summary()));
+      else toast("Здесь откроется чат с Антоном с готовым текстом результата");
     };
     const url = (S.settings.program_url || "").trim();
     if (/^https:\/\/\S+\.\S+/.test(url)) {
