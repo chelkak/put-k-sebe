@@ -51,7 +51,7 @@ window.SKIN = (function () {
       '<div class="b-rainbow"><img src="assets/rainbow.png" alt="" decoding="async"></div>' +
       '<div class="b-haze"></div>';
     // Рассвет и день подгружаем после старта, чтобы первый экран открывался быстро
-    const later = [[".b-dawn", "assets/scene-rassvet.png"], [".b-day", "assets/scene-den.png"]];
+    const later = [[".b-dawn", "assets/scene-rassvet.jpg"], [".b-day", "assets/scene-den.jpg"]];
     setTimeout(() => later.forEach(([sel, src]) => {
       const img = new Image();
       img.onload = () => { const n = scene.querySelector(sel); if (n) n.style.backgroundImage = `url("${src}")`; };

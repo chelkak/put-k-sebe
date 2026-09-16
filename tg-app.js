@@ -36,6 +36,16 @@
     tg.onEvent("viewportChanged", syncHeight);
   }
   syncHeight();
+
+  // Телефон заблокирован или мини-апп свёрнут: помечаем это, чтобы сцена ничего не анимировала.
+  // Иначе вебвью продолжает рисовать в фоне и при возврате подвисает.
+  function syncVisible() {
+    document.documentElement.classList.toggle("is-hidden", document.hidden);
+    if (!document.hidden) syncHeight();
+  }
+  document.addEventListener("visibilitychange", syncVisible);
+  window.addEventListener("pageshow", syncVisible);
+  syncVisible();
   if (tg) {
     const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
     if (u && u.first_name) S.user.first_name = u.first_name;

@@ -188,10 +188,11 @@ html:root[data-skin="b"] {
   transform: scale(var(--cam));
   transform-origin: 38% 100%;   /* растём от нижнего края: пара поднимается над карточкой, текст не двигаем */
   transition: opacity 1100ms ease, transform 1400ms cubic-bezier(0.25, 0.8, 0.3, 1), background-position 1400ms ease;
-  will-change: opacity, transform;
+  /* will-change убран намеренно: он держал три больших слоя в видеопамяти постоянно,
+     из-за этого после разблокировки телефона вебвью подвисал при восстановлении графики */
 }
 /* Ночь грузится сразу, рассвет и день подгружаются позже: иначе телефон тянет 7 МБ на старте */
-[data-skin="b"] .b-night { background-image: url("assets/scene-noch.png"); opacity: var(--night); }
+[data-skin="b"] .b-night { background-image: url("assets/scene-noch.jpg"); opacity: var(--night); }
 [data-skin="b"] .b-dawn  { opacity: var(--dawn); }
 [data-skin="b"] .b-day   { opacity: var(--day); }
 /* Свечение солнца: растёт с каждым ответом, поэтому шаг света заметен сразу */
@@ -227,6 +228,9 @@ html:root[data-skin="b"] {
 }
 @keyframes bDrift { from { transform: translateX(-4%); } to { transform: translateX(4%); } }
 @media (prefers-reduced-motion: reduce) { [data-skin="b"] .b-haze { animation: none; } }
+/* Экран заблокирован или мини-апп свёрнут: гасим анимации, чтобы вебвью не грузился впустую */
+[data-skin="b"].is-hidden .b-haze, [data-skin="b"].is-hidden .b-pulse { animation: none !important; }
+[data-skin="b"].is-hidden .b-layer { transition: none !important; }
 
 /* карточка снизу: сцена остаётся видимой сверху, пара идёт над ней */
 /* Вопрос начинается у верхней кромки карточки, а не жмётся к низу экрана */
@@ -327,11 +331,11 @@ html:root[data-skin="b"] {
   <div class="mini-foot"><button type="button" class="mini-main" id="mini-main" hidden></button></div>
 </section>
 <div class="toast" id="toast" hidden></div>
-<script src="content-questions.js?v=202609160247"></script>
-<script src="content-results.js?v=202609160247"></script>
-<script src="logic.js?v=202609160247"></script>
-<script src="miniapp.js?v=202609160247"></script>
-<script src="skin.js?v=202609160247"></script>
-<script src="tg-app.js?v=202609160247"></script>
+<script src="content-questions.js?v=202609160254"></script>
+<script src="content-results.js?v=202609160254"></script>
+<script src="logic.js?v=202609160254"></script>
+<script src="miniapp.js?v=202609160254"></script>
+<script src="skin.js?v=202609160254"></script>
+<script src="tg-app.js?v=202609160254"></script>
 </body>
 </html>
