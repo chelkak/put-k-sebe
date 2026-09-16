@@ -5,12 +5,14 @@ window.SKIN = (function () {
 
   // Доли кадров на ключевых шагах. Между ними значения считаются плавно.
   const KEYS = [
-    { s: 0,  night: 1.00, dawn: 0.00, day: 0.00, haze: 0.16 },
-    { s: 3,  night: 0.80, dawn: 0.20, day: 0.00, haze: 0.24 },
-    { s: 6,  night: 0.25, dawn: 0.75, day: 0.05, haze: 0.36 },
-    { s: 9,  night: 0.00, dawn: 1.00, day: 0.45, haze: 0.34 },
-    { s: 12, night: 0.00, dawn: 0.55, day: 1.00, haze: 0.24 },
-    { s: 15, night: 0.00, dawn: 0.15, day: 1.00, haze: 0.16 }
+    { s: 0,  night: 1.00, dawn: 0.00, day: 0.00, haze: 0.16, glow: 0.05 },
+    { s: 2,  night: 0.88, dawn: 0.12, day: 0.00, haze: 0.22, glow: 0.18 },
+    { s: 4,  night: 0.55, dawn: 0.45, day: 0.00, haze: 0.30, glow: 0.34 },
+    { s: 6,  night: 0.15, dawn: 0.85, day: 0.10, haze: 0.36, glow: 0.52 },
+    { s: 8,  night: 0.00, dawn: 0.95, day: 0.45, haze: 0.34, glow: 0.7 },
+    { s: 10, night: 0.00, dawn: 0.60, day: 0.85, haze: 0.28, glow: 0.85 },
+    { s: 12, night: 0.00, dawn: 0.25, day: 1.00, haze: 0.22, glow: 1 },
+    { s: 15, night: 0.00, dawn: 0.00, day: 1.00, haze: 0.14, glow: 1 }
   ];
   const mix = (a, b, t) => a + (b - a) * t;
 
@@ -19,7 +21,7 @@ window.SKIN = (function () {
     let i = 0; while (i < KEYS.length - 2 && s > KEYS[i + 1].s) i++;
     const a = KEYS[i], b = KEYS[i + 1], t = (s - a.s) / (b.s - a.s);
     const out = {};
-    for (const k of ["night", "dawn", "day", "haze"]) out[k] = mix(a[k], b[k], t);
+    for (const k of ["night", "dawn", "day", "haze", "glow"]) out[k] = mix(a[k], b[k], t);
     // В начале камера стоит у пары (сильное приближение), к концу отъезжает к горе.
     // Так пара с каждым ответом становится дальше и мельче, а долина раскрывается.
     const k = s / 15;
@@ -38,6 +40,7 @@ window.SKIN = (function () {
       '<div class="b-layer b-night"></div>' +
       '<div class="b-layer b-dawn"></div>' +
       '<div class="b-layer b-day"></div>' +
+      '<div class="b-glow"></div>' +
       '<div class="b-haze"></div>';
     // Рассвет и день подгружаем после старта, чтобы первый экран открывался быстро
     const later = [[".b-dawn", "assets/scene-rassvet.png"], [".b-day", "assets/scene-den.png"]];
@@ -61,6 +64,16 @@ window.SKIN = (function () {
     set("--haze", L.haze.toFixed(2));
     set("--cam", L.cam.toFixed(3));
     set("--pos-y", L.posY.toFixed(1) + "%");
+    set("--glow", L.glow.toFixed(3));
+    set("--k", (step / 15).toFixed(3));
+    // Вспышка света в момент ответа: шаг становится заметным
+    if (step > 0) {
+      s.classList.remove("is-pulse");
+      void s.offsetWidth;
+      s.classList.add("is-pulse");
+      clearTimeout(apply._t);
+      apply._t = setTimeout(() => s.classList.remove("is-pulse"), 800);
+    }
     // чем светлее сцена, тем плотнее карточка: текст должен читаться и на рассвете
     set("--card", `rgba(14, 12, 10, ${(0.8 + 0.12 * (step / 15)).toFixed(2)})`);
   }
