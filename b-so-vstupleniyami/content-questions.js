@@ -56,7 +56,8 @@ Object.assign(window.CONTENT, {
     BTN_LAST_RESULT: "Посмотреть результат",
     BTN_NEW_DIAGNOSTIC: "Пройти заново",
     BTN_ABOUT_SYSTEM: "Узнать о системе",
-    BTN_CONTACT: "Консультация"
+    BTN_CONTACT: "Консультация",
+    BTN_CONSULT_SIGNUP: "Записаться на консультацию"
   },
 
   // Порядок вариантов на экране перемешан вручную, чтобы «лучший» не стоял всегда первым.

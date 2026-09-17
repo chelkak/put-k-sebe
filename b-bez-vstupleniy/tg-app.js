@@ -16,6 +16,8 @@
 
   // Ссылки владельца (system_settings в ТЗ). Берутся отсюда при каждом запуске, чтобы замена доходила до всех.
   const PROGRAM_URL = "https://putksebe-system.ru/sam_zero";
+  // Кнопка «Перейти к программе» на результате. Выключена по просьбе Антона, пока не готова воронка (17.09).
+  const SHOW_PROGRAM = false;
   const CONTACT_URL = "https://t.me/anton_kostin_opora";
 
   // Данные могли остаться от прежней версии или испортиться: чего нет, подставляем по умолчанию.
@@ -180,7 +182,7 @@
   }
 
   window.APP = { get S() { return S; }, C, L, save, event, active, lastDone, newSession, computeResult, T, sphere, STATUS_TITLE,
-    renderPanel() {}, toast, tap() {}, contactUrl: CONTACT_URL, openTelegram, openLink };
+    renderPanel() {}, toast, tap() {}, contactUrl: CONTACT_URL, showProgram: SHOW_PROGRAM, openTelegram, openLink };
 
   // Пункт в меню «⋯» Telegram. Подпись («Настройки») задаёт сам Telegram, внутри наше меню.
   try {

@@ -222,7 +222,11 @@ window.MINI = (function () {
       else toast("Здесь откроется чат с Антоном с готовым текстом результата");
     };
     const url = (S.settings.program_url || "").trim();
-    if (/^https:\/\/\S+\.\S+/.test(url)) {
+    // Пока воронки нет, Антон просит одну главную кнопку: запись на консультацию, без перехода к программе (17.09).
+    // Вернуть программу: showProgram: true в tg-app.js.
+    if (A().showProgram === false) {
+      main(C.BUTTON.BTN_CONSULT_SIGNUP || C.BUTTON.BTN_CONTACT, contact);
+    } else if (/^https:\/\/\S+\.\S+/.test(url)) {
       b.append(ghost(C.BUTTON.BTN_CONTACT, contact));
       main(C.BUTTON.BTN_PROGRAM_OPEN, () => {
         event("program_link_clicked", url);                              // 8.7: событие до открытия ссылки
